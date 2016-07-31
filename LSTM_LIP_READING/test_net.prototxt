@@ -1,0 +1,123 @@
+layer {
+  name: "samples"
+  type: "Data"
+  top: "samples"
+  data_param {
+    source: "SAMPLES_TEST"
+    batch_size: 80
+    backend: LMDB
+  }
+}
+layer {
+  name: "labels"
+  type: "Data"
+  top: "labels"
+  data_param {
+    source: "LABELS_TEST"
+    batch_size: 80
+    backend: LMDB
+  }
+}
+layer {
+  name: "clip_markers"
+  type: "Data"
+  top: "clip_markers"
+  data_param {
+    source: "CLIP_MARKERS_TEST"
+    batch_size: 80
+    backend: LMDB
+  }
+}
+layer {
+  name: "reshape_sample_1"
+  type: "Reshape"
+  bottom: "samples"
+  top: "reshape_sample_1"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 4
+      dim: 2000
+    }
+  }
+}
+layer {
+  name: "reshape_label_1"
+  type: "Reshape"
+  bottom: "labels"
+  top: "reshape_label_1"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "reshape_clip_markers_1"
+  type: "Reshape"
+  bottom: "clip_markers"
+  top: "reshape_clip_markers_1"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "lstm_1"
+  type: "LSTM"
+  bottom: "reshape_sample_1"
+  bottom: "reshape_clip_markers_1"
+  top: "lstm_1"
+  recurrent_param {
+    num_output: 256
+    weight_filler {
+      type: "uniform"
+      min: -0.01
+      max: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "inner_product_1"
+  type: "InnerProduct"
+  bottom: "lstm_1"
+  top: "inner_product_1"
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+    }
+    axis: 2
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "inner_product_1"
+  bottom: "reshape_label_1"
+  top: "loss"
+  softmax_param {
+    axis: 2
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "inner_product_1"
+  bottom: "reshape_label_1"
+  top: "accuracy"
+  accuracy_param {
+    axis: 2
+  }
+}
