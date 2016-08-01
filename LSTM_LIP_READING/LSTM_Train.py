@@ -232,9 +232,9 @@ def main():
     solver.test_nets[0].forward()
 
 
-    solver_max_iter = 10000
-    solver_test_interval = 100
-    solver_test_iter = 100
+    solver_max_iter = 300
+    solver_test_interval = 50
+    solver_test_iter = 10
     train_loss = zeros(solver_max_iter)
     test_acc = zeros(int(np.ceil(solver_max_iter / solver_test_interval)))
     output = zeros((solver_max_iter, batch_size, 10))
@@ -243,7 +243,9 @@ def main():
     for it in range(solver_max_iter):
         
         solver.step(1)  # SGD by Caffe
-    
+        
+        print(np.unique(solver.net.blobs['labels'].data))
+        
         # store the train loss
         train_loss[it] = solver.net.blobs['loss'].data
     
@@ -257,8 +259,16 @@ def main():
                 correct += sum(solver.test_nets[0].blobs['accuracy'].data)
                 
             test_acc[it // solver_test_interval] = correct / 100
+            
+    _, ax1 = subplots()
+    ax2 = ax1.twinx()
+    ax1.plot(arange(solver_max_iter), train_loss)
+    ax2.plot(solver_test_interval * arange(len(test_acc)), test_acc, 'r')
     
-
+    ax1.set_xlabel('iteration')
+    ax1.set_ylabel('train loss')
+    ax2.set_ylabel('test accuracy')
+    ax2.set_title('Test Accuracy: {:.2f}'.format(test_acc[-1]))
 
 
 if __name__ == '__main__':
