@@ -2,7 +2,7 @@ train_net: "train_net.prototxt"
 test_net: "test_net.prototxt"
 test_iter: 100
 test_interval: 100
-base_lr: 0.1
+base_lr: 0.01
 display: 200
 max_iter: 10000
 lr_policy: "step"

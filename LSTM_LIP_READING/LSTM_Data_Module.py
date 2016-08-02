@@ -36,7 +36,9 @@ def prepareData_LMDB(data_path,
                      DB_NAME_CLIP_MARKERS_TRAIN,
                      DB_NAME_CLIP_MARKERS_TEST,
                      DB_NAME_LOGICAL_LABLES_TRAIN,
-                     DB_NAME_LOGICAL_LABELS_TEST):
+                     DB_NAME_LOGICAL_LABELS_TEST,
+                     DB_NAME_SAMPLE_INDEXES_TRAIN,
+                     DB_NAME_SAMPLE_INDEXES_TEST):
      
     # Why batch_size is needed?
     
@@ -70,8 +72,36 @@ def prepareData_LMDB(data_path,
     logical_labels_test = logical_labels[ :, person_index_test, :, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech, label_types_num))
 
     labels_train = labels[ :, person_index_train, : ].reshape((speech_num_per_person * len(person_index_train), frame_num_per_speech))
-    label_test = labels[ :, person_index_test, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech))
+    labels_test = labels[ :, person_index_test, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech))
 
+    # Create a local data identifier 
+    # Create a local samples identifirer
+    # Create a local sample identifier 
+    # Create a local sample identifier 
+    
+    # Size speech_num_per_person*person_index*frame_num_per_speech*
+    
+    sample_indexes_train = labels[ :, person_index_train, : ]
+    
+    for i in range(0, sample_indexes_train.shape[1]) :
+        for j in range(0, sample_indexes_train.shape[0]) :
+            for k in range(0, sample_indexes_train.shape[2]) :
+                sample_indexes_train[j,i,k] = 10000 * person_index_train[i] + 100 * j + k
+                 
+    sample_indexes_test = labels[ :, person_index_test, : ]
+    
+    for i in range(0, sample_indexes_test.shape[1]) :
+        for j in range(0, sample_indexes_test.shape[0]) :
+            for k in range(0, sample_indexes_test.shape[2]) :
+                sample_indexes_test[j,i,k] = 10000 * person_index_test[i] + 100 * j + k
+                
+                
+    sample_indexes_train = sample_indexes_train.reshape(labels_train.shape)
+    sample_indexes_test = sample_indexes_test.reshape(labels_test.shape)
+    
+    insert_data_to_DB(sample_indexes_train[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_SAMPLE_INDEXES_TRAIN)  
+    insert_data_to_DB(sample_indexes_test[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_SAMPLE_INDEXES_TEST)     
+    
     
     
     insert_data_to_DB(samples_train[:,:,newaxis,:,:], batch_size, DB_NAME_SAMPLES_TRAIN)  
@@ -84,7 +114,7 @@ def prepareData_LMDB(data_path,
     insert_data_to_DB(logical_labels_test[:,:,newaxis,newaxis,:], batch_size, DB_NAME_LOGICAL_LABELS_TEST)  
     
     insert_data_to_DB(labels_train[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_LABLES_TRAIN)  
-    insert_data_to_DB(label_test[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_LABELS_TEST)  
+    insert_data_to_DB(labels_test[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_LABELS_TEST)  
     
 def insert_data_to_DB (data, batch_size, DB_NAME):  
     

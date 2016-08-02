@@ -55,7 +55,8 @@ def creatNet(data_path,
              DB_NAME_SAMPLES,
              DB_NAME_LABELS,
              DB_NAME_CLIP_MARKERS,
-             DB_NAME_LOGICAL_LABELS,       
+             DB_NAME_LOGICAL_LABELS,
+             DB_NAME_SAMPLE_INDEX,       
              image_height,
              image_width,
              channel_num,
@@ -84,6 +85,9 @@ def creatNet(data_path,
                               backend = P.Data.LMDB,
                               source = DB_NAME_CLIP_MARKERS)
     
+    net.sample_indexes = L.Data(batch_size = batch_size,
+                              backend = P.Data.LMDB,
+                              source = DB_NAME_SAMPLE_INDEX)
     
     
     net.reshape_sample_1 = L.Reshape(net.samples,
@@ -160,19 +164,21 @@ def main():
     
     # Prepare data
     data_path = 'Data'
-    batch_size = 80
-    DB_NAME_SAMPLES_TRAIN = 'SAMPLES_TRAIN'
-    DB_NAME_SAMPLES_TEST = 'SAMPLES_TEST'
-    DB_NAME_LABELS_TRAIN = 'LABELS_TRAIN'
-    DB_NAME_LABELS_TEST = 'LABELS_TEST'
-    DB_NAME_CLIP_MARKERS_TRAIN = 'CLIP_MARKERS_TRAIN'
-    DB_NAME_CLIP_MARKERS_TEST = 'CLIP_MARKERS_TEST'
-    DB_NAME_LOGICAL_LABELS_TRAIN = 'LOGICAL_LABELS_TRAIN'
-    DB_NAME_LOGICAL_LABELS_TEST = 'LOGICAL_LABELS_TEST'  
-    
+    batch_size = 60
+    DB_NAME_SAMPLES_TRAIN = './LMDB_DB/SAMPLES_TRAIN'
+    DB_NAME_SAMPLES_TEST = './LMDB_DB/SAMPLES_TEST'
+    DB_NAME_LABELS_TRAIN = './LMDB_DB/LABELS_TRAIN'
+    DB_NAME_LABELS_TEST = './LMDB_DB/LABELS_TEST'
+    DB_NAME_CLIP_MARKERS_TRAIN = './LMDB_DB/CLIP_MARKERS_TRAIN'
+    DB_NAME_CLIP_MARKERS_TEST = './LMDB_DB/CLIP_MARKERS_TEST'
+    DB_NAME_LOGICAL_LABELS_TRAIN = './LMDB_DB/LOGICAL_LABELS_TRAIN'
+    DB_NAME_LOGICAL_LABELS_TEST = './LMDB_DB/LOGICAL_LABELS_TEST'  
+    DB_NAME_SAMPLE_INDEX_TRAIN = './LMDB_DB/SAMPLE_INDEX_TRAIN'
+    DB_NAME_SAMPLE_INDEX_TEST = './LMDB_DB/SAMPLE_INDEX_TEST'
     
     # put the data to the lmdb
-    # prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST)
+    
+    # prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST)
     
     
     # create train net
@@ -184,7 +190,8 @@ def main():
                    DB_NAME_SAMPLES_TRAIN,
                    DB_NAME_LABELS_TRAIN,
                    DB_NAME_CLIP_MARKERS_TRAIN,
-                   DB_NAME_LOGICAL_LABELS_TRAIN,       
+                   DB_NAME_LOGICAL_LABELS_TRAIN,    
+                   DB_NAME_SAMPLE_INDEX_TRAIN,   
                    image_height = 40,
                    image_width = 50,
                    channel_num = 1,
@@ -196,11 +203,12 @@ def main():
     
     
     test_net = creatNet(data_path, 
-                       batch_size,
+                       20,
                        DB_NAME_SAMPLES_TEST,
                        DB_NAME_LABELS_TEST,
                        DB_NAME_CLIP_MARKERS_TEST,
                        DB_NAME_LOGICAL_LABELS_TEST,       
+                       DB_NAME_SAMPLE_INDEX_TEST,
                        image_height = 40,
                        image_width = 50,
                        channel_num = 1,
@@ -213,7 +221,7 @@ def main():
     
     # create solver
     solver_path = 'solver.prototxt'
-    solver = createSolver(solver_path, train_net_path, test_net_path, 0.1)
+    solver = createSolver(solver_path, train_net_path, test_net_path, 0.01)
     
     #save solver
     with open(solver_path, 'w') as f:
@@ -232,23 +240,28 @@ def main():
     solver.test_nets[0].forward()
 
 
-    solver_max_iter = 300
+    solver_max_iter = 1000
     solver_test_interval = 50
     solver_test_iter = 10
     train_loss = zeros(solver_max_iter)
-    test_acc = zeros(int(np.ceil(solver_max_iter / solver_test_interval)))
+    test_acc = zeros(int(np.ceil(solver_max_iter / solver_test_interval)+1))
     output = zeros((solver_max_iter, batch_size, 10))
-
+    
+    tmp_sample_indexes = zeros((solver_max_iter, batch_size))
+    tmp_labels=zeros((solver_max_iter,batch_size))
+    tmp_clip_markers=zeros((solver_max_iter,batch_size))
     # the main solver loop
     for it in range(solver_max_iter):
         
         solver.step(1)  # SGD by Caffe
         
-        print(np.unique(solver.net.blobs['labels'].data))
+        #  print(np.unique(solver.net.blobs['labels'].data))
         
         # store the train loss
         train_loss[it] = solver.net.blobs['loss'].data
-    
+        tmp_sample_indexes [it,:] = solver.net.blobs['sample_indexes'].data[:,0,0,0].reshape((1, batch_size))
+        tmp_labels[it,:]=solver.net.blobs['labels'].data.reshape((1,batch_size))
+        tmp_clip_markers[it,:]=solver.net.blobs['clip_markers'].data.reshape((1,batch_size))
         if it % solver_test_interval == 0:
             print 'Iteration', it, 'testing...'
             correct = 0
@@ -265,6 +278,9 @@ def main():
     ax1.plot(arange(solver_max_iter), train_loss)
     ax2.plot(solver_test_interval * arange(len(test_acc)), test_acc, 'r')
     
+    import scipy.io as sio
+    sio.savemat('./Output/inter_output.mat',{'sample_indexes':tmp_sample_indexes,'labels':tmp_labels,'clip_markers':tmp_clip_markers})
+    sio.savemat('./Output/loss.mat',{'loss':train_loss})
     ax1.set_xlabel('iteration')
     ax1.set_ylabel('train loss')
     ax2.set_ylabel('test accuracy')

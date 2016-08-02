@@ -4,7 +4,7 @@ layer {
   top: "samples"
   data_param {
     source: "SAMPLES_TEST"
-    batch_size: 80
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -14,7 +14,7 @@ layer {
   top: "labels"
   data_param {
     source: "LABELS_TEST"
-    batch_size: 80
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -24,7 +24,17 @@ layer {
   top: "clip_markers"
   data_param {
     source: "CLIP_MARKERS_TEST"
-    batch_size: 80
+    batch_size: 20
+    backend: LMDB
+  }
+}
+layer {
+  name: "sample_indexes"
+  type: "Data"
+  top: "sample_indexes"
+  data_param {
+    source: "SAMPLE_INDEX_TEST"
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -36,7 +46,7 @@ layer {
   reshape_param {
     shape {
       dim: 20
-      dim: 4
+      dim: 1
       dim: 2000
     }
   }
@@ -49,7 +59,7 @@ layer {
   reshape_param {
     shape {
       dim: 20
-      dim: 4
+      dim: 1
     }
   }
 }
@@ -61,7 +71,7 @@ layer {
   reshape_param {
     shape {
       dim: 20
-      dim: 4
+      dim: 1
     }
   }
 }
