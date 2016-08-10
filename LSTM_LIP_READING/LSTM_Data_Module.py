@@ -99,22 +99,46 @@ def prepareData_LMDB(data_path,
     sample_indexes_train = sample_indexes_train.reshape(labels_train.shape)
     sample_indexes_test = sample_indexes_test.reshape(labels_test.shape)
     
+    
+    
+    # Shuffling the data
+    
+    sequence_index_train = np.linspace(0, labels_train.shape[0] - 1, labels_train.shape[0]).astype('int')
+    sequence_index_test = np.linspace(0, labels_test.shape[0] - 1, labels_test.shape[0]).astype('int')
+    
+    rd.shuffle(sequence_index_train)
+    rd.shuffle(sequence_index_test)
+    
+    sample_indexes_train = sample_indexes_train[sequence_index_train,:]
+    sample_indexes_test = sample_indexes_test[sequence_index_test,:]
+    
+    labels_train = labels_train[sequence_index_train,:]
+    labels_test = labels_test[sequence_index_test,:]
+    
+    clip_markers_train = clip_markers_train[sequence_index_train,:]
+    clip_markers_test = clip_markers_test[sequence_index_test,:]
+    
+    logical_labels_train = logical_labels_train[sequence_index_train,:,:]
+    logical_labels_test = logical_labels_test[sequence_index_test,:,:]
+    
+    samples_train = samples_train[sequence_index_train,:,:,:]
+    samples_test = samples_test[sequence_index_test,:,:,:]
+
+    
     insert_data_to_DB(sample_indexes_train[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_SAMPLE_INDEXES_TRAIN)  
-    insert_data_to_DB(sample_indexes_test[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_SAMPLE_INDEXES_TEST)     
-    
-    
-    
+    insert_data_to_DB(sample_indexes_test[:,:,newaxis, newaxis, newaxis], 20, DB_NAME_SAMPLE_INDEXES_TEST)     
+   
     insert_data_to_DB(samples_train[:,:,newaxis,:,:], batch_size, DB_NAME_SAMPLES_TRAIN)  
-    insert_data_to_DB(samples_test[:,:,newaxis,:,:], batch_size, DB_NAME_SAMPLES_TEST) 
+    insert_data_to_DB(samples_test[:,:,newaxis,:,:], 20, DB_NAME_SAMPLES_TEST) 
      
     insert_data_to_DB(clip_markers_train[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_CLIP_MARKERS_TRAIN)  
-    insert_data_to_DB(clip_markers_test[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_CLIP_MARKERS_TEST)  
+    insert_data_to_DB(clip_markers_test[:,:,newaxis, newaxis, newaxis], 20, DB_NAME_CLIP_MARKERS_TEST)  
     
     insert_data_to_DB(logical_labels_train[:,:,newaxis,newaxis,:], batch_size, DB_NAME_LOGICAL_LABLES_TRAIN)  
-    insert_data_to_DB(logical_labels_test[:,:,newaxis,newaxis,:], batch_size, DB_NAME_LOGICAL_LABELS_TEST)  
+    insert_data_to_DB(logical_labels_test[:,:,newaxis,newaxis,:], 20, DB_NAME_LOGICAL_LABELS_TEST)  
     
     insert_data_to_DB(labels_train[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_LABLES_TRAIN)  
-    insert_data_to_DB(labels_test[:,:,newaxis, newaxis, newaxis], batch_size, DB_NAME_LABELS_TEST)  
+    insert_data_to_DB(labels_test[:,:,newaxis, newaxis, newaxis], 20, DB_NAME_LABELS_TEST)  
     
 def insert_data_to_DB (data, batch_size, DB_NAME):  
     
@@ -129,6 +153,10 @@ def insert_data_to_DB (data, batch_size, DB_NAME):
      channel,    # fake 
      frame_height, 
      frame_width] = data.shape
+    
+    
+
+    
     
     sequence_num_per_batch = batch_size / frame_num_per_sequence
     if frame_height == 1:

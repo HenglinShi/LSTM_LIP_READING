@@ -7,6 +7,7 @@ import caffe
 from caffe.proto import caffe_pb2
 from caffe import layers as L, params as P
 from LSTM_Data_Module import prepareData_LMDB
+from LSTM_Net_Define_Module import creatNet
 from pylab import *
 
 def createSolver(solver_path, train_net_path, test_net_path, base_lr = 0.001):
@@ -49,115 +50,6 @@ def createSolver(solver_path, train_net_path, test_net_path, base_lr = 0.001):
     solver.clip_gradients = 5
     
     return solver
-    
-def creatNet(data_path, 
-             batch_size,
-             DB_NAME_SAMPLES,
-             DB_NAME_LABELS,
-             DB_NAME_CLIP_MARKERS,
-             DB_NAME_LOGICAL_LABELS,
-             DB_NAME_SAMPLE_INDEX,       
-             image_height,
-             image_width,
-             channel_num,
-             image_num_per_sequence):
-
-    
-    sequence_num_per_batch = batch_size / image_num_per_sequence
-    
-    
-    # DEFINE THE NETWORK ARCHETECTURE
-    net = caffe.NetSpec()
-    
-    # DATA LAYER
-    # SAMPLE AND LABEL
-    net.samples = L.Data(batch_size = batch_size,
-                         backend = P.Data.LMDB,
-                         source = DB_NAME_SAMPLES)
-    
- 
-    
-    net.labels = L.Data(batch_size = batch_size,
-                        backend = P.Data.LMDB,
-                        source = DB_NAME_LABELS)
-    
-    net.clip_markers = L.Data(batch_size = batch_size,
-                              backend = P.Data.LMDB,
-                              source = DB_NAME_CLIP_MARKERS)
-    
-    net.sample_indexes = L.Data(batch_size = batch_size,
-                              backend = P.Data.LMDB,
-                              source = DB_NAME_SAMPLE_INDEX)
-    
-    
-    net.reshape_sample_1 = L.Reshape(net.samples,
-                                     reshape_param = { 'shape': {'dim': [image_num_per_sequence, sequence_num_per_batch, image_height * image_width] } })
-        
-    
-    # Reshaple lable
-    net.reshape_label_1 = L.Reshape(net.labels,
-                                    reshape_param = { 'shape': {'dim': [image_num_per_sequence, sequence_num_per_batch]}})
-    
-    # Reshape clip markers
-    net.reshape_clip_markers_1 = L.Reshape(net.clip_markers,
-                                           reshape_param  = { 'shape': {'dim': [image_num_per_sequence, sequence_num_per_batch]}})
-
-    
-    # LSTM network
-    
-    net.lstm_1 = L.LSTM(net.reshape_sample_1, 
-                        net.reshape_clip_markers_1,
-                        recurrent_param = {'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min': -0.01, 'max': 0.01},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})
-    
-    # INNERPRODUCT LAYER
-    net.inner_product_1 = L.InnerProduct(net.lstm_1,
-                                         inner_product_param = {'num_output': 10,
-                                                                'weight_filler': {'type': 'gaussian', 'std': 0.1},
-                                                                'bias_filler': {'type': 'constant'},
-                                                                'axis': 2})
-    
-    
-    # LOSS LAYER
-    net.loss = L.SoftmaxWithLoss(net.inner_product_1,
-                                 net.reshape_label_1, 
-                                 softmax_param = {'axis': 2})
-    
-    # Accuracy layer
-    net.accuracy = L.Accuracy(net.inner_product_1, 
-                              net.reshape_label_1,
-                              accuracy_param = {'axis': 2})
-    
-    # RESHAPE LAYER
-    # WHY RESHAPE?
-    # Data from database looks like:
-    # sample (sequence = 1, time = 1)
-    # sample (sequence = 1, time = 2)
-    #                .
-    #                .
-    #                .
-    # sample (sequence = 1, time = T)
-    # sample (sequence = 2, time = 1)
-    #
-    # Thus for feeding the LSTM, the data should like :
-
-    # sample (s = 1, t = 1), sample (s = 2, t = 1), sample (s = 3 ,t = 1),  ...  sample (s = N, t = 1)
-    # sample (s = 1, t = 2), sample (s = 2, t = 2), sample (s = 3, t = 2),  ...  sample (s = N, t = 2)
-    #                                        .
-    #                                        .
-    # sample (s = 1, t = T), sample (s = 2, t = T), sample (s = 3, t = T),  ...  sample (s = N, t = T)                                        .
-    
-    # RESHAPE SHOULE BE TWICE
-    # WHY?
-    # Because the caffe build-in reshape is line-prioritize filled
-    
-    # THE 1st RESHAPE
-    
-    # SAMPLES RESHAPE LAYER
-    # input shape (raw sample shape): a blob of (T * N) * h * w
-    # desired output shape: a blob of 
-    return net
 
     
 def main():
@@ -240,8 +132,8 @@ def main():
     solver.test_nets[0].forward()
 
 
-    solver_max_iter = 1000
-    solver_test_interval = 50
+    solver_max_iter = 100000
+    solver_test_interval = 2000
     solver_test_iter = 10
     train_loss = zeros(solver_max_iter)
     test_acc = zeros(int(np.ceil(solver_max_iter / solver_test_interval)+1))
@@ -270,8 +162,9 @@ def main():
                 solver.test_nets[0].forward()
                 
                 correct += sum(solver.test_nets[0].blobs['accuracy'].data)
+                print (solver.test_nets[0].blobs['accuracy'].data)
                 
-            test_acc[it // solver_test_interval] = correct / 100
+            test_acc[it // solver_test_interval] = correct / solver_test_iter
             
     _, ax1 = subplots()
     ax2 = ax1.twinx()
