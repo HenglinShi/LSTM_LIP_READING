@@ -70,7 +70,7 @@ def main():
     
     # put the data to the lmdb
     
-    # prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST)
+    prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST)
     
     
     # create train net
@@ -134,7 +134,7 @@ def main():
 
     solver_max_iter = 100000
     solver_test_interval = 2000
-    solver_test_iter = 10
+    solver_test_iter = 100
     train_loss = zeros(solver_max_iter)
     test_acc = zeros(int(np.ceil(solver_max_iter / solver_test_interval)+1))
     output = zeros((solver_max_iter, batch_size, 10))
@@ -165,6 +165,9 @@ def main():
                 print (solver.test_nets[0].blobs['accuracy'].data)
                 
             test_acc[it // solver_test_interval] = correct / solver_test_iter
+    
+    
+    tmp_acc = test_acc/(int(np.ceil(solver_max_iter / solver_test_interval)))
             
     _, ax1 = subplots()
     ax2 = ax1.twinx()
@@ -174,6 +177,7 @@ def main():
     import scipy.io as sio
     sio.savemat('./Output/inter_output.mat',{'sample_indexes':tmp_sample_indexes,'labels':tmp_labels,'clip_markers':tmp_clip_markers})
     sio.savemat('./Output/loss.mat',{'loss':train_loss})
+    sio.savemat('./Output/acc.mat', {'acc':test_acc})
     ax1.set_xlabel('iteration')
     ax1.set_ylabel('train loss')
     ax2.set_ylabel('test accuracy')
