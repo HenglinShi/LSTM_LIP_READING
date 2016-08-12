@@ -1,5 +1,3 @@
-train_net: "train_net.prototxt"
-test_net: "test_net.prototxt"
 test_iter: 100
 test_interval: 100
 base_lr: 0.01
@@ -14,5 +12,6 @@ snapshot: 5000
 snapshot_prefix: "snapshot_lstm_lip_reading"
 solver_mode: CPU
 random_seed: 1701
+net: "train_test_net.prototxt"
 average_loss: 1000
 clip_gradients: 5

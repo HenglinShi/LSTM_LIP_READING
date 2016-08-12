@@ -5,6 +5,8 @@ Created on Aug 8, 2016
 '''
 import caffe
 from caffe import layers as L, params as P
+import numpy as np
+from numpy import ones
 
 
 def creatNet(data_path,
@@ -157,19 +159,42 @@ def creatNet(data_path,
                                          inner_product_param={'num_output': 10,                                                             
                                                               'weight_filler': {'type': 'gaussian', 'std': 0.01},
                                                               'bias_filler': {'type': 'constant', 'value': 0},
-                                                              'axis': 2})
+                                                              'axis': -2})
+    
+    net.slice_ip12_1 = L.Slice()
+
+
+#     
+#     net.inner_product_3 = L.InnerProduct(net.inner_product_2,
+#                                          inner_product_param={'num_output': 1,                                                             
+#                                                               'weight_filler': {'type': 'gaussian', 'std': 0.01},
+#                                                               'bias_filler': {'type': 'constant', 'value': 0},
+#                                                               'axis': 0})
+#     
+#     
+# 
+#     
+#     [net.slice_label_1, net.slice_label_2] = L.Slice(net.reshape_label_1,
+#                                                      ntop = 2,
+#                                                      slice_param = {'axis': 0,
+#                                                                     'slice_point': 1})
+#     
+#     
+#     net.reshape_slice_label_1 = L.Reshape(net.slice_label_1,
+#                                  reshape_param={ 'shape': {'dim': [1, sequence_num_per_batch]}})
+    
+    
     
     
     # LOSS LAYER
-    net.loss = L.SoftmaxWithLoss(net.inner_product_2,
-                                 net.reshape_label_1,
-                                 softmax_param={'axis': 2})
+    #net.loss = L.SoftmaxWithLoss(net.inner_product_3,
+     #                            net.reshape_slice_label_1)
     
     # Accuracy layer
-    net.accuracy = L.Accuracy(net.inner_product_2,
-                              net.reshape_label_1,
-                              accuracy_param={'axis': 2})
+    #net.accuracy = L.Accuracy(net.inner_product_3,
+    #                          net.reshape_slice_label_1)
     
+
     # RESHAPE LAYER
     # WHY RESHAPE?
     # Data from database looks like:

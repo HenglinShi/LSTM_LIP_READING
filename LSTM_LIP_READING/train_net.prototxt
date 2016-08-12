@@ -249,26 +249,6 @@ layer {
       type: "constant"
       value: 0
     }
-    axis: 2
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "inner_product_2"
-  bottom: "reshape_label_1"
-  top: "loss"
-  softmax_param {
-    axis: 2
-  }
-}
-layer {
-  name: "accuracy"
-  type: "Accuracy"
-  bottom: "inner_product_2"
-  bottom: "reshape_label_1"
-  top: "accuracy"
-  accuracy_param {
-    axis: 2
+    axis: -2
   }
 }

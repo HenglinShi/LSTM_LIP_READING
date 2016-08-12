@@ -10,12 +10,10 @@ from LSTM_Data_Module import prepareData_LMDB
 from LSTM_Net_Define_Module import creatNet
 from pylab import *
 
-def createSolver(solver_path, train_net_path, test_net_path, base_lr = 0.001):
+def createSolver(solver_path, net_path, base_lr = 0.001):
     solver = caffe_pb2.SolverParameter()
     
-    solver.train_net = train_net_path
-    
-    solver.test_net.append(test_net_path)
+    solver.net = net_path
     
     solver.test_iter.append(100)
     
@@ -70,50 +68,51 @@ def main():
     
     # put the data to the lmdb
     
-    prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST)
+    # prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST)
     
     
     # create train net
-    train_net_path = 'train_net.prototxt'
-    test_net_path = 'test_net.prototxt'
- 
-    train_net = creatNet(data_path, 
-                   batch_size,
-                   DB_NAME_SAMPLES_TRAIN,
-                   DB_NAME_LABELS_TRAIN,
-                   DB_NAME_CLIP_MARKERS_TRAIN,
-                   DB_NAME_LOGICAL_LABELS_TRAIN,    
-                   DB_NAME_SAMPLE_INDEX_TRAIN,   
-                   image_height = 40,
-                   image_width = 50,
-                   channel_num = 1,
-                   image_num_per_sequence = 20)
-
-    #save net
-    with open(train_net_path, 'w') as f:
-        f.write(str(train_net.to_proto()))
-    
-    
-    test_net = creatNet(data_path, 
-                       20,
-                       DB_NAME_SAMPLES_TEST,
-                       DB_NAME_LABELS_TEST,
-                       DB_NAME_CLIP_MARKERS_TEST,
-                       DB_NAME_LOGICAL_LABELS_TEST,       
-                       DB_NAME_SAMPLE_INDEX_TEST,
-                       image_height = 40,
-                       image_width = 50,
-                       channel_num = 1,
-                       image_num_per_sequence = 20)
-    
-    
-        #save net
-    with open(test_net_path, 'w') as f:
-        f.write(str(test_net.to_proto()))
-    
-    # create solver
+#     train_net_path = 'train_net.prototxt'
+#     test_net_path = 'test_net.prototxt'
+#  
+#     train_net = creatNet(data_path, 
+#                    batch_size,
+#                    DB_NAME_SAMPLES_TRAIN,
+#                    DB_NAME_LABELS_TRAIN,
+#                    DB_NAME_CLIP_MARKERS_TRAIN,
+#                    DB_NAME_LOGICAL_LABELS_TRAIN,    
+#                    DB_NAME_SAMPLE_INDEX_TRAIN,   
+#                    image_height = 40,
+#                    image_width = 50,
+#                    channel_num = 1,
+#                    image_num_per_sequence = 20)
+# 
+#     #save net
+#     with open(train_net_path, 'w') as f:
+#         f.write(str(train_net.to_proto()))
+#     
+#     
+#     test_net = creatNet(data_path, 
+#                        20,
+#                        DB_NAME_SAMPLES_TEST,
+#                        DB_NAME_LABELS_TEST,
+#                        DB_NAME_CLIP_MARKERS_TEST,
+#                        DB_NAME_LOGICAL_LABELS_TEST,       
+#                        DB_NAME_SAMPLE_INDEX_TEST,
+#                        image_height = 40,
+#                        image_width = 50,
+#                        channel_num = 1,
+#                        image_num_per_sequence = 20)
+#     
+#     
+#         #save net
+#     with open(test_net_path, 'w') as f:
+#         f.write(str(test_net.to_proto()))
+#     
+#     # create solver
+    net_path = 'train_test_net.prototxt'
     solver_path = 'solver.prototxt'
-    solver = createSolver(solver_path, train_net_path, test_net_path, 0.01)
+    solver = createSolver(solver_path, net_path, 0.01)
     
     #save solver
     with open(solver_path, 'w') as f:
@@ -127,9 +126,6 @@ def main():
     solver = None
     solver = caffe.SGDSolver(solver_path)
     
-    [(k, v.data.shape) for k, v in solver.net.blobs.items()]
-    solver.net.forward()
-    solver.test_nets[0].forward()
 
 
     solver_max_iter = 100000
