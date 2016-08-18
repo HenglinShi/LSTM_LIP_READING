@@ -6,7 +6,7 @@ layer {
     scale: 0.00390625
   }
   data_param {
-    source: "./LMDB_DB/SAMPLE_TRAIN"
+    source: "./Experiment/4/SAMPLE_TRAIN"
     batch_size: 60
     backend: LMDB
   }
@@ -17,7 +17,7 @@ layer {
   type: "Data"
   top: "label"
   data_param {
-    source: "./LMDB_DB/LABEL_TRAIN"
+    source: "./Experiment/4/LABEL_TRAIN"
     batch_size: 60
     backend: LMDB
   }
@@ -28,7 +28,7 @@ layer {
   type: "Data"
   top: "cm"
   data_param {
-    source: "./LMDB_DB/CLIP_MARKER_TRAIN"
+    source: "./Experiment/4/CLIP_MARKER_TRAIN"
     batch_size: 60
     backend: LMDB
   }
@@ -39,7 +39,7 @@ layer {
   type: "Data"
   top: "si"
   data_param {
-    source: "./LMDB_DB/SAMPLE_INDEX_TRAIN"
+    source: "./Experiment/4/SAMPLE_INDEX_TRAIN"
     batch_size: 60
     backend: LMDB
   }
@@ -54,7 +54,7 @@ layer {
     scale: 0.00390625
   }
   data_param {
-    source: "./LMDB_DB/SAMPLE_TEST"
+    source: "./Experiment/4/SAMPLE_TEST"
     batch_size: 20
     backend: LMDB
   }
@@ -65,7 +65,7 @@ layer {
   type: "Data"
   top: "label"
   data_param {
-    source: "./LMDB_DB/LABEL_TEST"
+    source: "./Experiment/4/LABEL_TEST"
     batch_size: 20
     backend: LMDB
   }
@@ -76,7 +76,7 @@ layer {
   type: "Data"
   top: "cm"
   data_param {
-    source: "./LMDB_DB/CLIP_MARKER_TEST"
+    source: "./Experiment/4/CLIP_MARKER_TEST"
     batch_size: 20
     backend: LMDB
   }
@@ -87,7 +87,7 @@ layer {
   type: "Data"
   top: "si"
   data_param {
-    source: "./LMDB_DB/SAMPLE_INDEX_TEST"
+    source: "./Experiment/4/SAMPLE_INDEX_TEST"
     batch_size: 20
     backend: LMDB
   }

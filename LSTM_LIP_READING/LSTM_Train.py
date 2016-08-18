@@ -15,7 +15,7 @@ def createSolver(solver_path, net_path, base_lr = 0.001):
     
     solver.net = net_path
     
-    solver.test_iter.append(100)
+    solver.test_iter.append(0)
     
     solver.test_interval = 100
     
@@ -68,7 +68,8 @@ def main():
     
     # put the data to the lmdb
     
-    # prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST)
+   # prepareData_LMDB(data_path,batch_size,DB_NAME_SAMPLES_TRAIN,DB_NAME_SAMPLES_TEST,DB_NAME_LABELS_TRAIN,DB_NAME_LABELS_TEST,DB_NAME_CLIP_MARKERS_TRAIN,DB_NAME_CLIP_MARKERS_TEST,DB_NAME_LOGICAL_LABELS_TRAIN, DB_NAME_LOGICAL_LABELS_TEST, DB_NAME_SAMPLE_INDEX_TRAIN, DB_NAME_SAMPLE_INDEX_TEST,
+    #                 )
     
     
     # create train net
@@ -129,15 +130,24 @@ def main():
 
 
     solver_max_iter = 100000
-    solver_test_interval = 2000
-    solver_test_iter = 100
+    solver_test_interval = 20000
+    solver_test_iter = 300
     train_loss = zeros(solver_max_iter)
-    test_acc = zeros(int(np.ceil(solver_max_iter / solver_test_interval)+1))
+    
+    test_iteration_times = int(np.ceil(solver_max_iter / solver_test_interval)+1)
+    test_acc = zeros(test_iteration_times)
     output = zeros((solver_max_iter, batch_size, 10))
     
     tmp_sample_indexes = zeros((solver_max_iter, batch_size))
     tmp_labels=zeros((solver_max_iter,batch_size))
     tmp_clip_markers=zeros((solver_max_iter,batch_size))
+    
+    
+    test_sample_index =  zeros((test_iteration_times + 1, solver_test_iter, 20))
+    test_cm = zeros((test_iteration_times + 1, solver_test_iter, 20))
+    tes_label = zeros((test_iteration_times + 1, solver_test_iter, 20))
+    test_pred = zeros((test_iteration_times + 1, solver_test_iter,10))
+    
     # the main solver loop
     for it in range(solver_max_iter):
         
@@ -147,15 +157,21 @@ def main():
         
         # store the train loss
         train_loss[it] = solver.net.blobs['loss'].data
-        tmp_sample_indexes [it,:] = solver.net.blobs['sample_indexes'].data[:,0,0,0].reshape((1, batch_size))
-        tmp_labels[it,:]=solver.net.blobs['labels'].data.reshape((1,batch_size))
-        tmp_clip_markers[it,:]=solver.net.blobs['clip_markers'].data.reshape((1,batch_size))
+        tmp_sample_indexes [it,:] = solver.net.blobs['si'].data[:,0,0,0].reshape((1, batch_size))
+        tmp_labels[it,:]=solver.net.blobs['label'].data.reshape((1,batch_size))
+        tmp_clip_markers[it,:]=solver.net.blobs['cm'].data.reshape((1,batch_size))
         if it % solver_test_interval == 0:
             print 'Iteration', it, 'testing...'
             correct = 0
             for test_it in range(solver_test_iter):
                 
                 solver.test_nets[0].forward()
+                
+                test_sample_index [it // solver_test_interval, test_it, :] = solver.test_nets[0].blobs['si'].data[:,0,0,0]
+                test_cm[it // solver_test_interval, test_it, :] = solver.test_nets[0].blobs['cm'].data[:,0,0,0]
+                tes_label[it // solver_test_interval, test_it, :] = solver.test_nets[0].blobs['label'].data[:,0,0,0]
+     
+                test_pred[it // solver_test_interval, test_it,:] = solver.test_nets[0].blobs['ip_3'].data[0,:]
                 
                 correct += sum(solver.test_nets[0].blobs['accuracy'].data)
                 print (solver.test_nets[0].blobs['accuracy'].data)
