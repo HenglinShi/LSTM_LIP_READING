@@ -122,12 +122,12 @@ def createSolver(solver_path, net_path, base_lr = 0.001):
 
 def main ():
     
-    data_path = "Data"
+    data_path = "Data/V1"
     
 
     batch_size_train = 60
     batch_size_test = 20 
-    folds_CV = 10      
+    folds_CV = 5      
           
     DB_PREFIX = './Experiment/'      
     _DB_NAME_SAMPLE_TRAIN = '/SAMPLE_TRAIN'
