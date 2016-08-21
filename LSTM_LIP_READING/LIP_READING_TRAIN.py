@@ -118,18 +118,7 @@ def createSolver(solver_path, net_path, base_lr = 0.001):
     
     return solver
 
-
-
-def main ():
-    
-    data_path = "Data"
-    
-
-    batch_size_train = 60
-    batch_size_test = 20 
-    folds_CV = 10      
-          
-    DB_PREFIX = './Experiment/'      
+def prepareData(DB_PREFIX, data, data_version, person_index_train, person_index_test, sequence_index_train, sequence_index_test, fold_index, batch_size_train, batch_size_test):
     _DB_NAME_SAMPLE_TRAIN = '/SAMPLE_TRAIN'
     _DB_NAME_SAMPLE_TEST = '/SAMPLE_TEST'
     _DB_NAME_LABEL_TRAIN = '/LABEL_TRAIN'
@@ -140,103 +129,59 @@ def main ():
     _DB_NAME_LOGICAL_LABEL_TEST = '/LOGICAL_LABEL_TEST'  
     _DB_NAME_SAMPLE_INDEX_TRAIN = '/SAMPLE_INDEX_TRAIN'
     _DB_NAME_SAMPLE_INDEX_TEST = '/SAMPLE_INDEX_TEST'
-
     
     
     
+                           
+    DB_NAME_SAMPLE_TRAIN = DB_PREFIX + str(fold_index) + _DB_NAME_SAMPLE_TRAIN + data_version   
+    DB_NAME_SAMPLE_TEST = DB_PREFIX + str(fold_index) + _DB_NAME_SAMPLE_TEST + data_version
     
-    
-    
-    
-    
-    # Load the data
-    data = loadData(data_path)
-    
-    # Create splitting index
     samples = data['samples'].astype('uint8')
-    labels = data['labels'].astype('int')
-    logical_labels = data['logical_labels'].astype('int')
-    clip_markers = data['clip_markers'].astype('int')
+    [speech_num_per_person, person_num, frame_num_per_speech, frame_height, frame_width] = samples.shape
+    samples_train = samples[ :, person_index_train, :, :, : ].reshape((speech_num_per_person * len(person_index_train), frame_num_per_speech, frame_height, frame_width))
+    samples_test = samples[ :, person_index_test, :, :, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech, frame_height, frame_width))
     
-    label_types_num = len(np.unique(labels))
-    
-    [speech_num_per_person, person_num, frame_num_per_speech, frame_height, frame_width,] = samples.shape
-
-    # Shuffling persons and dividing to training set and testing set
-    person_index = np.linspace(0, person_num - 1, person_num).astype('int') 
-    # person_index = range(pers)
-    rd.shuffle(person_index)
-    
-    step_CV = np.floor(person_num / folds_CV)
-    #sample_shape_train = [speech_num_per_person * (len(person_index) - step_CV), frame_num_per_speech, frame_height, frame_width]
-    #sample_shape_test = [speech_num_per_person * step_CV, frame_num_per_speech, frame_height, frame_width]
+    samples_train = samples_train[sequence_index_train,:,:,:]
+    samples_test = samples_test[sequence_index_test,:,:,:]
+    insert_data_to_DB(samples_train[:,:,newaxis,:,:], batch_size_train, DB_NAME_SAMPLE_TRAIN)  
+    insert_data_to_DB(samples_test[:,:,newaxis,:,:], batch_size_test, DB_NAME_SAMPLE_TEST) 
     
     
-    # Initializing tmp variable
-
-
+    if data_version == '_V1':
+        DB_NAME_LABEL_TRAIN = DB_PREFIX + str(fold_index) + _DB_NAME_LABEL_TRAIN
+        DB_NAME_LABEL_TEST = DB_PREFIX + str(fold_index)  + _DB_NAME_LABEL_TEST
+        DB_NAME_CLIP_MARKER_TRAIN = DB_PREFIX + str(fold_index) + _DB_NAME_CLIP_MARKER_TRAIN
+        DB_NAME_CLIP_MARKER_TEST = DB_PREFIX + str(fold_index)  + _DB_NAME_CLIP_MARKER_TEST
+        DB_NAME_LOGICAL_LABEL_TRAIN = DB_PREFIX + str(fold_index) + _DB_NAME_LOGICAL_LABEL_TRAIN
+        DB_NAME_LOGICAL_LABEL_TEST = DB_PREFIX + str(fold_index)  + _DB_NAME_LOGICAL_LABEL_TEST
+        DB_NAME_SAMPLE_INDEX_TRAIN = DB_PREFIX + str(fold_index)  + _DB_NAME_SAMPLE_INDEX_TRAIN
+        DB_NAME_SAMPLE_INDEX_TEST = DB_PREFIX + str(fold_index) + _DB_NAME_SAMPLE_INDEX_TEST
     
-    caffe.set_device(0)
-    caffe.set_mode_gpu()
+        labels = data['labels'].astype('int')
+        logical_labels = data['logical_labels'].astype('int')
+        clip_markers = data['clip_markers'].astype('int')
     
-    solver_max_iter = 50000
-    solver_test_interval = 2000
-    solver_test_iter = 150
-    test_times = (int)(np.ceil(float32(solver_max_iter) / float32(solver_test_interval)))
-    
-    test_acc = zeros((folds_CV, test_times))
-      
-    
-    
-    for ite_folds in range(folds_CV):
-        
-        nn = ite_folds + 1     
-                       
-        DB_NAME_SAMPLE_TRAIN = DB_PREFIX + str((ite_folds + 1)) + _DB_NAME_SAMPLE_TRAIN
-           
-        DB_NAME_SAMPLE_TEST = DB_PREFIX + str((ite_folds + 1)) + _DB_NAME_SAMPLE_TEST
-        DB_NAME_LABEL_TRAIN = DB_PREFIX + str((ite_folds + 1)) + _DB_NAME_LABEL_TRAIN
-        DB_NAME_LABEL_TEST = DB_PREFIX + str((ite_folds + 1))  + _DB_NAME_LABEL_TEST
-        DB_NAME_CLIP_MARKER_TRAIN = DB_PREFIX + str((ite_folds + 1)) + _DB_NAME_CLIP_MARKER_TRAIN
-        DB_NAME_CLIP_MARKER_TEST = DB_PREFIX + str((ite_folds + 1))  + _DB_NAME_CLIP_MARKER_TEST
-        DB_NAME_LOGICAL_LABEL_TRAIN = DB_PREFIX + str((ite_folds + 1)) + _DB_NAME_LOGICAL_LABEL_TRAIN
-        DB_NAME_LOGICAL_LABEL_TEST = DB_PREFIX + str((ite_folds + 1))  + _DB_NAME_LOGICAL_LABEL_TEST
-        DB_NAME_SAMPLE_INDEX_TRAIN = DB_PREFIX + str((ite_folds + 1))  + _DB_NAME_SAMPLE_INDEX_TRAIN
-        DB_NAME_SAMPLE_INDEX_TEST = DB_PREFIX + str((ite_folds + 1)) + _DB_NAME_SAMPLE_INDEX_TEST
-        
-
-        
-        person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
-        person_index_train = np.setdiff1d(person_index, person_index_test)
-        
-        rd.shuffle(person_index_train)
-        
-        #person_index[[0:(step_CV * ite_folds)], [(step_CV * ite_folds + step_CV) : person_num]]
-            
-        
-        
-        samples_train = samples[ :, person_index_train, :, :, : ].reshape((speech_num_per_person * len(person_index_train), frame_num_per_speech, frame_height, frame_width))
-        samples_test = samples[ :, person_index_test, :, :, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech, frame_height, frame_width))
-                
+        label_types_num = len(np.unique(labels))
+                  
         logical_labels_train = logical_labels[ :, person_index_train, :, : ].reshape((speech_num_per_person * len(person_index_train), frame_num_per_speech, label_types_num))
         logical_labels_test = logical_labels[ :, person_index_test, :, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech, label_types_num))
-            
+                
         clip_markers_train = clip_markers[ :, person_index_train, : ].reshape((speech_num_per_person * len(person_index_train), frame_num_per_speech))
         clip_markers_test = clip_markers[ :, person_index_test, : ].reshape((speech_num_per_person * len(person_index_test), frame_num_per_speech))
-    
+        
         labels_train = labels[ :, person_index_train, : ].reshape(clip_markers_train.shape)
         labels_test = labels[ :, person_index_test, : ].reshape(clip_markers_test.shape)
-           
+               
         #Create Sample Index
         sample_indexes_train = labels[ :, person_index_train, : ]
-        
+            
         for i in range(0, sample_indexes_train.shape[1]) :
             for j in range(0, sample_indexes_train.shape[0]) :
                 for k in range(0, sample_indexes_train.shape[2]) :
                     sample_indexes_train[j,i,k] = 10000 * (person_index_train[i] + 1) + 100 * (j + 1) + k + 1
-                     
+                         
         sample_indexes_test = labels[ :, person_index_test, : ]
-        
+            
         for i in range(0, sample_indexes_test.shape[1]) :
             for j in range(0, sample_indexes_test.shape[0]) :
                 for k in range(0, sample_indexes_test.shape[2]) :
@@ -245,45 +190,108 @@ def main ():
                     
         sample_indexes_train = sample_indexes_train.reshape(labels_train.shape)
         sample_indexes_test = sample_indexes_test.reshape(labels_test.shape)
-    
         
-        # Shuffling the data separately for traing set and testing set
-        sequence_index_train = np.linspace(0, labels_train.shape[0] - 1, labels_train.shape[0]).astype('int')
-        sequence_index_test = np.linspace(0, labels_test.shape[0] - 1, labels_test.shape[0]).astype('int')   
-    
-        rd.shuffle(sequence_index_train)
-        rd.shuffle(sequence_index_test)
-    
+               
+        
         sample_indexes_train = sample_indexes_train[sequence_index_train,:]
         sample_indexes_test = sample_indexes_test[sequence_index_test,:]
-        
+            
         labels_train = labels_train[sequence_index_train,:]
         labels_test = labels_test[sequence_index_test,:]
-        
+            
         clip_markers_train = clip_markers_train[sequence_index_train,:]
         clip_markers_test = clip_markers_test[sequence_index_test,:]
-        
+            
         logical_labels_train = logical_labels_train[sequence_index_train,:,:]
         logical_labels_test = logical_labels_test[sequence_index_test,:,:]
         
-        samples_train = samples_train[sequence_index_train,:,:,:]
-        samples_test = samples_test[sequence_index_test,:,:,:]
-        
         insert_data_to_DB(sample_indexes_train[:,:,newaxis, newaxis, newaxis], batch_size_train, DB_NAME_SAMPLE_INDEX_TRAIN)  
         insert_data_to_DB(sample_indexes_test[:,:,newaxis, newaxis, newaxis], batch_size_test, DB_NAME_SAMPLE_INDEX_TEST)     
-       
-        insert_data_to_DB(samples_train[:,:,newaxis,:,:], batch_size_train, DB_NAME_SAMPLE_TRAIN)  
-        insert_data_to_DB(samples_test[:,:,newaxis,:,:], batch_size_test, DB_NAME_SAMPLE_TEST) 
-         
+           
         insert_data_to_DB(clip_markers_train[:,:,newaxis, newaxis, newaxis], batch_size_train, DB_NAME_CLIP_MARKER_TRAIN)  
         insert_data_to_DB(clip_markers_test[:,:,newaxis, newaxis, newaxis], batch_size_test, DB_NAME_CLIP_MARKER_TEST)  
-        
+            
         insert_data_to_DB(logical_labels_train[:,:,newaxis,newaxis,:], batch_size_train, DB_NAME_LOGICAL_LABEL_TRAIN)  
         insert_data_to_DB(logical_labels_test[:,:,newaxis,newaxis,:], batch_size_test, DB_NAME_LOGICAL_LABEL_TEST)  
-        
+            
         insert_data_to_DB(labels_train[:,:,newaxis, newaxis, newaxis], batch_size_train, DB_NAME_LABEL_TRAIN)  
-        insert_data_to_DB(labels_test[:,:,newaxis, newaxis, newaxis], batch_size_test, DB_NAME_LABEL_TEST)  
+        insert_data_to_DB(labels_test[:,:,newaxis, newaxis, newaxis], batch_size_test, DB_NAME_LABEL_TEST) 
+    
+
+def main ():
+    
+    data_v1_path = "Data/V1/"
+    data_v2_path = "Data/V2/"
+    data_v3_path = "Data/V3/"
+    data_v4_path = "Data/V4/"
+    data_v5_path = "Data/V5/"
+
+
+    batch_size_train = 60
+    batch_size_test = 20 
+    folds_CV = 5     
+          
+    DB_PREFIX = './Experiment/'       
+    
+    # Load the data
+    data_v1 = loadData(data_v1_path)
+    data_v2 = loadData(data_v2_path)
+    data_v3 = loadData(data_v3_path)
+    data_v4 = loadData(data_v4_path)
+    data_v5 = loadData(data_v5_path)
+    
+    samples = data_v1['samples'].astype('uint8')
+
+    # Create splitting index
+    [speech_num_per_person, person_num, frame_num_per_speech, frame_height, frame_width] = samples.shape
+    
+
+
+    # Shuffling persons and dividing to training set and testing set
+    person_index = np.linspace(0, person_num - 1, person_num).astype('int') 
+    # person_index = range(pers)
+    rd.shuffle(person_index)
+    
+    step_CV = np.floor(person_num / folds_CV)
+
+  
+    caffe.set_device(0)
+    caffe.set_mode_gpu()
+    
+    solver_max_iter = 10000
+    solver_test_interval = 2000
+    solver_test_iter = 300
+    test_times = (int)(np.ceil(float32(solver_max_iter) / float32(solver_test_interval)))
+    
+    test_acc = zeros((folds_CV, test_times))
+      
+    
+    
+    for ite_folds in range(folds_CV):
+               
+        person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
+        person_index_train = np.setdiff1d(person_index, person_index_test)
         
+        rd.shuffle(person_index_train)
+        
+        sequence_num_train = (person_num - step_CV) * speech_num_per_person
+        sequence_num_test = step_CV * speech_num_per_person
+        
+        sequence_index_train = np.linspace(0, sequence_num_train - 1, sequence_num_train).astype('int')
+        sequence_index_test = np.linspace(0, sequence_num_test - 1, sequence_num_test).astype('int')
+        
+        rd.shuffle(sequence_index_train)
+        rd.shuffle(sequence_index_test)
+        
+        
+        prepareData(DB_PREFIX, data_v1, '_V1', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
+        prepareData(DB_PREFIX, data_v2, '_V2', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
+        prepareData(DB_PREFIX, data_v3, '_V3', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
+        prepareData(DB_PREFIX, data_v4, '_V4', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
+        prepareData(DB_PREFIX, data_v5, '_V5', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
+        
+        #person_index[[0:(step_CV * ite_folds)], [(step_CV * ite_folds + step_CV) : person_num]]
+  
         
         
         solver_path = './Experiment/' + str(ite_folds + 1) + '/solver.prototxt'
@@ -300,6 +308,7 @@ def main ():
         test_index = 0
 
         while rest_train_iter > 0 :
+            
             
             if (int)(rest_train_iter / solver_test_interval) > 0:
                 solver.step(solver_test_interval)

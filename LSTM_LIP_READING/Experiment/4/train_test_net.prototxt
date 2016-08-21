@@ -1,17 +1,77 @@
 layer {
-  name: "sample"
+  name: "sample_v1"
   type: "Data"
-  top: "sample"
+  top: "sample_v1"
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/4/SAMPLE_TRAIN"
+    source: "./Experiment/4/SAMPLE_TRAIN_V1"
     batch_size: 60
     backend: LMDB
   }
   include: { phase: TRAIN }
 }
+
+layer {
+  name: "sample_v2"
+  type: "Data"
+  top: "sample_v2"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TRAIN_V2"
+    batch_size: 60
+    backend: LMDB
+  }
+  include: { phase: TRAIN }
+}
+
+layer {
+  name: "sample_v3"
+  type: "Data"
+  top: "sample_v3"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TRAIN_V3"
+    batch_size: 60
+    backend: LMDB
+  }
+  include: { phase: TRAIN }
+}
+
+layer {
+  name: "sample_v4"
+  type: "Data"
+  top: "sample_v4"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TRAIN_V4"
+    batch_size: 60
+    backend: LMDB
+  }
+  include: { phase: TRAIN }
+}
+layer {
+  name: "sample_v5"
+  type: "Data"
+  top: "sample_v5"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TRAIN_V5"
+    batch_size: 60
+    backend: LMDB
+  }
+  include: { phase: TRAIN }
+}
+
 layer {
   name: "label"
   type: "Data"
@@ -46,20 +106,90 @@ layer {
   include: { phase: TRAIN }
 }
 
+
+
+
+
 layer {
-  name: "sample"
+  name: "sample_v1"
   type: "Data"
-  top: "sample"
+  top: "sample_v1"
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/4/SAMPLE_TEST"
+    source: "./Experiment/4/SAMPLE_TEST_V1"
     batch_size: 20
     backend: LMDB
   }
   include: { phase: TEST }
 }
+
+
+layer {
+  name: "sample_v2"
+  type: "Data"
+  top: "sample_v2"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TEST_V2"
+    batch_size: 20
+    backend: LMDB
+  }
+  include: { phase: TEST }
+}
+
+
+layer {
+  name: "sample_v3"
+  type: "Data"
+  top: "sample_v3"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TEST_V3"
+    batch_size: 20
+    backend: LMDB
+  }
+  include: { phase: TEST }
+}
+
+
+
+layer {
+  name: "sample_v4"
+  type: "Data"
+  top: "sample_v4"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TEST_V4"
+    batch_size: 20
+    backend: LMDB
+  }
+  include: { phase: TEST }
+}
+
+
+layer {
+  name: "sample_v5"
+  type: "Data"
+  top: "sample_v5"
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "./Experiment/4/SAMPLE_TEST_V5"
+    batch_size: 20
+    backend: LMDB
+  }
+  include: { phase: TEST }
+}
+
 layer {
   name: "label"
   type: "Data"
@@ -71,6 +201,7 @@ layer {
   }
   include: { phase: TEST }
 }
+
 layer {
   name: "clip_marker"
   type: "Data"
@@ -96,31 +227,130 @@ layer {
 
 
 layer {
-  name: "bn_1"
+  name: "bn_1_v1"
   type: "BatchNorm"
-  bottom: "sample"
-  top: "bn_1"
+  bottom: "sample_v1"
+  top: "bn_1_v1"
 }
+
 layer {
-  name: "scale_1"
+  name: "bn_1_v2"
+  type: "BatchNorm"
+  bottom: "sample_v2"
+  top: "bn_1_v2"
+}
+
+layer {
+  name: "bn_1_v3"
+  type: "BatchNorm"
+  bottom: "sample_v3"
+  top: "bn_1_v3"
+}
+
+layer {
+  name: "bn_1_v4"
+  type: "BatchNorm"
+  bottom: "sample_v4"
+  top: "bn_1_v4"
+}
+
+layer {
+  name: "bn_1_v5"
+  type: "BatchNorm"
+  bottom: "sample_v5"
+  top: "bn_1_v5"
+}
+
+
+layer {
+  name: "scale_1_v1"
   type: "Scale"
-  bottom: "bn_1"
-  top: "scale_1"
+  bottom: "bn_1_v1"
+  top: "scale_1_v1"
   scale_param {
     bias_term: true
   }
 }
+
 layer {
-  name: "relu_3"
+  name: "scale_1_v2"
+  type: "Scale"
+  bottom: "bn_1_v2"
+  top: "scale_1_v2"
+  scale_param {
+    bias_term: true
+  }
+}
+
+layer {
+  name: "scale_1_3"
+  type: "Scale"
+  bottom: "bn_1_v3"
+  top: "scale_1_v3"
+  scale_param {
+    bias_term: true
+  }
+}
+
+layer {
+  name: "scale_1_v4"
+  type: "Scale"
+  bottom: "bn_1_v4"
+  top: "scale_1_v4"
+  scale_param {
+    bias_term: true
+  }
+}
+
+layer {
+  name: "scale_1_v5"
+  type: "Scale"
+  bottom: "bn_1_v5"
+  top: "scale_1_v5"
+  scale_param {
+    bias_term: true
+  }
+}
+
+layer {
+  name: "relu_1_v1"
   type: "ReLU"
-  bottom: "scale_1"
-  top: "relu_3"
+  bottom: "scale_1_v1"
+  top: "relu_1_v1"
+}
+
+layer {
+  name: "relu_1_v2"
+  type: "ReLU"
+  bottom: "scale_1_v2"
+  top: "relu_1_v2"
 }
 layer {
-  name: "conv_1"
+  name: "relu_1_v3"
+  type: "ReLU"
+  bottom: "scale_1_v3"
+  top: "relu_1_v3"
+}
+layer {
+  name: "relu_1_v4"
+  type: "ReLU"
+  bottom: "scale_1_v4"
+  top: "relu_1_v4"
+}
+layer {
+  name: "relu_1_v5"
+  type: "ReLU"
+  bottom: "scale_1_v5"
+  top: "relu_1_v5"
+}
+
+
+
+layer {
+  name: "conv_1_v1"
   type: "Convolution"
-  bottom: "relu_3"
-  top: "conv_1"
+  bottom: "relu_1_v1"
+  top: "conv_1_v1"
   param {
     lr_mult: 1
     decay_mult: 1
@@ -143,43 +373,299 @@ layer {
     }
   }
 }
+
 layer {
-  name: "pooling_1"
+  name: "conv_1_v2"
+  type: "Convolution"
+  bottom: "relu_1_v2"
+  top: "conv_1_v2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+layer {
+  name: "conv_1_v3"
+  type: "Convolution"
+  bottom: "relu_1_v3"
+  top: "conv_1_v3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+layer {
+  name: "conv_1_v4"
+  type: "Convolution"
+  bottom: "relu_1_v4"
+  top: "conv_1_v4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+layer {
+  name: "conv_1_v5"
+  type: "Convolution"
+  bottom: "relu_1_v5"
+  top: "conv_1_v5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+
+layer {
+  name: "pooling_1_v1"
   type: "Pooling"
-  bottom: "conv_1"
-  top: "pooling_1"
+  bottom: "conv_1_v1"
+  top: "pooling_1_v1"
   pooling_param {
     pool: MAX
     kernel_size: 3
     stride: 2
   }
 }
+
 layer {
-  name: "bn_2"
+  name: "pooling_1_v2"
+  type: "Pooling"
+  bottom: "conv_1_v2"
+  top: "pooling_1_v2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "pooling_1_v3"
+  type: "Pooling"
+  bottom: "conv_1_v3"
+  top: "pooling_1_v3"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "pooling_1_v4"
+  type: "Pooling"
+  bottom: "conv_1_v4"
+  top: "pooling_1_v4"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "pooling_1_v5"
+  type: "Pooling"
+  bottom: "conv_1_v5"
+  top: "pooling_1_v5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+
+layer {
+  name: "bn_2_v1"
   type: "BatchNorm"
-  bottom: "pooling_1"
-  top: "bn_2"
+  bottom: "pooling_1_v1"
+  top: "bn_2_v1"
 }
 layer {
-  name: "scale_2"
+  name: "bn_2_v2"
+  type: "BatchNorm"
+  bottom: "pooling_1_v2"
+  top: "bn_2_v2"
+}
+layer {
+  name: "bn_2_v3"
+  type: "BatchNorm"
+  bottom: "pooling_1_v3"
+  top: "bn_2_v3"
+}
+layer {
+  name: "bn_2_v4"
+  type: "BatchNorm"
+  bottom: "pooling_1_v4"
+  top: "bn_2_v4"
+}
+layer {
+  name: "bn_2_v5"
+  type: "BatchNorm"
+  bottom: "pooling_1_v5"
+  top: "bn_2_v5"
+}
+
+
+layer {
+  name: "scale_2_v1"
   type: "Scale"
-  bottom: "bn_2"
-  top: "scale_2"
+  bottom: "bn_2_v1"
+  top: "scale_2_v1"
   scale_param {
     bias_term: true
   }
 }
 layer {
-  name: "relu_1"
-  type: "ReLU"
-  bottom: "scale_2"
-  top: "relu_1"
+  name: "scale_2_v2"
+  type: "Scale"
+  bottom: "bn_2_v2"
+  top: "scale_2_v2"
+  scale_param {
+    bias_term: true
+  }
 }
 layer {
-  name: "ip_1"
+  name: "scale_2_v3"
+  type: "Scale"
+  bottom: "bn_2_v3"
+  top: "scale_2_v3"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "scale_2_v4"
+  type: "Scale"
+  bottom: "bn_2_v4"
+  top: "scale_2_v4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "scale_2_v5"
+  type: "Scale"
+  bottom: "bn_2_v5"
+  top: "scale_2_v5"
+  scale_param {
+    bias_term: true
+  }
+}
+
+layer {
+  name: "relu_2_v1"
+  type: "ReLU"
+  bottom: "scale_2_v1"
+  top: "relu_2_v1"
+}
+
+layer {
+  name: "relu_2_v2"
+  type: "ReLU"
+  bottom: "scale_2_v2"
+  top: "relu_2_v2"
+}
+
+layer {
+  name: "relu_2_v3"
+  type: "ReLU"
+  bottom: "scale_2_v3"
+  top: "relu_2_v3"
+}
+
+layer {
+  name: "relu_2_v4"
+  type: "ReLU"
+  bottom: "scale_2_v4"
+  top: "relu_2_v4"
+}
+
+layer {
+  name: "relu_2_v5"
+  type: "ReLU"
+  bottom: "scale_2_v5"
+  top: "relu_2_v5"
+}
+
+
+layer {
+  name: "ip_1_v1"
   type: "InnerProduct"
-  bottom: "relu_1"
-  top: "ip_1"
+  bottom: "relu_2_v1"
+  top: "ip_1_v1"
   param {
     lr_mult: 1
     decay_mult: 1
@@ -200,26 +686,195 @@ layer {
     }
   }
 }
+
 layer {
-  name: "relu_2"
+  name: "ip_1_v2"
+  type: "InnerProduct"
+  bottom: "relu_2_v2"
+  top: "ip_1_v2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+layer {
+  name: "ip_1_v3"
+  type: "InnerProduct"
+  bottom: "relu_2_v3"
+  top: "ip_1_v3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+layer {
+  name: "ip_1_v4"
+  type: "InnerProduct"
+  bottom: "relu_2_v4"
+  top: "ip_1_v4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+layer {
+  name: "ip_1_v5"
+  type: "InnerProduct"
+  bottom: "relu_2_v5"
+  top: "ip_1_v5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+
+
+layer {
+  name: "relu_3_v1"
   type: "ReLU"
-  bottom: "ip_1"
-  top: "relu_2"
+  bottom: "ip_1_v1"
+  top: "relu_3_v1"
 }
 layer {
-  name: "dropout_1"
+  name: "relu_3_v2"
+  type: "ReLU"
+  bottom: "ip_1_v2"
+  top: "relu_3_v2"
+}
+layer {
+  name: "relu_3_v3"
+  type: "ReLU"
+  bottom: "ip_1_v3"
+  top: "relu_3_v3"
+}
+layer {
+  name: "relu_3_v4"
+  type: "ReLU"
+  bottom: "ip_1_v4"
+  top: "relu_3_v4"
+}
+layer {
+  name: "relu_3_v5"
+  type: "ReLU"
+  bottom: "ip_1_v5"
+  top: "relu_3_v5"
+}
+
+layer {
+  name: "dropout_1_v1"
   type: "Dropout"
-  bottom: "relu_2"
-  top: "dropout_1"
+  bottom: "relu_3_v1"
+  top: "dropout_1_v1"
+  dropout_param {
+    dropout_ratio: 0.9
+  }
+}
+
+layer {
+  name: "dropout_1_v2"
+  type: "Dropout"
+  bottom: "relu_3_v2"
+  top: "dropout_1_v2"
   dropout_param {
     dropout_ratio: 0.9
   }
 }
 layer {
-  name: "reshape_sample_1"
+  name: "dropout_1_v3"
+  type: "Dropout"
+  bottom: "relu_3_v3"
+  top: "dropout_1_v3"
+  dropout_param {
+    dropout_ratio: 0.9
+  }
+}
+layer {
+  name: "dropout_1_v4"
+  type: "Dropout"
+  bottom: "relu_3_v4"
+  top: "dropout_1_v4"
+  dropout_param {
+    dropout_ratio: 0.9
+  }
+}
+layer {
+  name: "dropout_1_v5"
+  type: "Dropout"
+  bottom: "relu_3_v5"
+  top: "dropout_1_v5"
+  dropout_param {
+    dropout_ratio: 0.9
+  }
+}
+
+layer {
+  name: "reshape_sample_1_v1"
   type: "Reshape"
-  bottom: "dropout_1"
-  top: "reshape_sample_1"
+  bottom: "dropout_1_v1"
+  top: "reshape_sample_1_v1"
   reshape_param {
     shape {
       dim: 20
@@ -229,6 +884,64 @@ layer {
   }
   include: { phase: TRAIN }
 }
+layer {
+  name: "reshape_sample_1_v2"
+  type: "Reshape"
+  bottom: "dropout_1_v2"
+  top: "reshape_sample_1_v2"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 3
+      dim: 4096
+    }
+  }
+  include: { phase: TRAIN }
+}
+layer {
+  name: "reshape_sample_1_v3"
+  type: "Reshape"
+  bottom: "dropout_1_v3"
+  top: "reshape_sample_1_v3"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 3
+      dim: 4096
+    }
+  }
+  include: { phase: TRAIN }
+}
+layer {
+  name: "reshape_sample_1_v4"
+  type: "Reshape"
+  bottom: "dropout_1_v4"
+  top: "reshape_sample_1_v4"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 3
+      dim: 4096
+    }
+  }
+  include: { phase: TRAIN }
+}
+
+layer {
+  name: "reshape_sample_1_v5"
+  type: "Reshape"
+  bottom: "dropout_1_v5"
+  top: "reshape_sample_1_v5"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 3
+      dim: 4096
+    }
+  }
+  include: { phase: TRAIN }
+}
+
 layer {
   name: "reshape_label_1"
   type: "Reshape"
@@ -258,10 +971,10 @@ layer {
 
 
 layer {
-  name: "reshape_sample_1"
+  name: "reshape_sample_1_v1"
   type: "Reshape"
-  bottom: "dropout_1"
-  top: "reshape_sample_1"
+  bottom: "dropout_1_v1"
+  top: "reshape_sample_1_v1"
   reshape_param {
     shape {
       dim: 20
@@ -271,6 +984,63 @@ layer {
   }
   include: { phase: TEST }
 }
+layer {
+  name: "reshape_sample_1_v2"
+  type: "Reshape"
+  bottom: "dropout_1_v2"
+  top: "reshape_sample_1_v2"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 1
+      dim: 4096
+    }
+  }
+  include: { phase: TEST }
+}
+layer {
+  name: "reshape_sample_1_v3"
+  type: "Reshape"
+  bottom: "dropout_1_v3"
+  top: "reshape_sample_1_v3"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 1
+      dim: 4096
+    }
+  }
+  include: { phase: TEST }
+}
+layer {
+  name: "reshape_sample_1_v4"
+  type: "Reshape"
+  bottom: "dropout_1_v4"
+  top: "reshape_sample_1_v4"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 1
+      dim: 4096
+    }
+  }
+  include: { phase: TEST }
+}
+layer {
+  name: "reshape_sample_1_v5"
+  type: "Reshape"
+  bottom: "dropout_1_v5"
+  top: "reshape_sample_1_v5"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 1
+      dim: 4096
+    }
+  }
+  include: { phase: TEST }
+}
+
 layer {
   name: "reshape_label_1"
   type: "Reshape"
@@ -299,13 +1069,12 @@ layer {
 }
 
 
-
 layer {
-  name: "lstm_1"
+  name: "lstm_1_v1"
   type: "LSTM"
-  bottom: "reshape_sample_1"
+  bottom: "reshape_sample_1_v1"
   bottom: "reshape_cm_1"
-  top: "lstm_1"
+  top: "lstm_1_v1"
   recurrent_param {
     num_output: 256
     weight_filler {
@@ -320,18 +1089,150 @@ layer {
   }
 }
 layer {
-  name: "dropout_2"
+  name: "lstm_1_v2"
+  type: "LSTM"
+  bottom: "reshape_sample_1_v2"
+  bottom: "reshape_cm_1"
+  top: "lstm_1_v2"
+  recurrent_param {
+    num_output: 256
+    weight_filler {
+      type: "uniform"
+      min: -0.01
+      max: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "lstm_1_v3"
+  type: "LSTM"
+  bottom: "reshape_sample_1_v3"
+  bottom: "reshape_cm_1"
+  top: "lstm_1_v3"
+  recurrent_param {
+    num_output: 256
+    weight_filler {
+      type: "uniform"
+      min: -0.01
+      max: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "lstm_1_v4"
+  type: "LSTM"
+  bottom: "reshape_sample_1_v4"
+  bottom: "reshape_cm_1"
+  top: "lstm_1_v4"
+  recurrent_param {
+    num_output: 256
+    weight_filler {
+      type: "uniform"
+      min: -0.01
+      max: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "lstm_1_v5"
+  type: "LSTM"
+  bottom: "reshape_sample_1_v5"
+  bottom: "reshape_cm_1"
+  top: "lstm_1_v5"
+  recurrent_param {
+    num_output: 256
+    weight_filler {
+      type: "uniform"
+      min: -0.01
+      max: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "dropout_2_v1"
   type: "Dropout"
-  bottom: "lstm_1"
-  top: "dropout_2"
+  bottom: "lstm_1_v1"
+  top: "dropout_2_v1"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
 layer {
+  name: "dropout_2_v2"
+  type: "Dropout"
+  bottom: "lstm_1_v2"
+  top: "dropout_2_v2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "dropout_2_v3"
+  type: "Dropout"
+  bottom: "lstm_1_v3"
+  top: "dropout_2_v3"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "dropout_2_v4"
+  type: "Dropout"
+  bottom: "lstm_1_v4"
+  top: "dropout_2_v4"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "dropout_2_v5"
+  type: "Dropout"
+  bottom: "lstm_1_v5"
+  top: "dropout_2_v5"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+
+
+layer {
+  name: "concate_sample_1"
+  bottom: "dropout_2_v1"
+  bottom: "dropout_2_v2"
+  bottom: "dropout_2_v3"
+  bottom: "dropout_2_v4"
+  bottom: "dropout_2_v5"
+  top: "concate_sample_1"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+
+layer {
   name: "ip_2"
   type: "InnerProduct"
-  bottom: "lstm_1"
+  bottom: "concate_sample_1"
   top: "ip_2"
   param {
     lr_mult: 1
@@ -354,6 +1255,8 @@ layer {
     axis: 2
   }
 }
+
+
 layer {
   name: "slice_sample_1"
   type: "Slice"
@@ -368,6 +1271,9 @@ layer {
   }
   include: { phase: TRAIN }
 }
+
+
+
 layer {
   name: "reshape_sample_2_1"
   bottom: "slice_sample_1_1"
@@ -413,18 +1319,20 @@ layer {
   include: { phase: TRAIN }
 }
 
+
 layer {
-  name: "concate_sample_1"
+  name: "concate_sample_2"
   bottom: "reshape_sample_2_1"
   bottom: "reshape_sample_2_2"
   bottom: "reshape_sample_2_3"
-  top: "concate_sample_1"
+  top: "concate_sample_2"
   type: "Concat"
   concat_param {
     axis: 0
   }
   include: { phase: TRAIN }
 }
+
 
 
 layer {
@@ -444,9 +1352,9 @@ layer {
 
 
 layer {
-  name: "concate_sample_1"
+  name: "concate_sample_2"
   bottom: "reshape_sample_2_1"
-  top: "concate_sample_1"
+  top: "concate_sample_2"
   type: "Concat"
   concat_param {
     axis: 0
@@ -457,7 +1365,7 @@ layer {
 
 layer {
    name: "ip_3"
-   bottom: "concate_sample_1"
+   bottom: "concate_sample_2"
    top: "ip_3"
    type: "InnerProduct"
    param {
@@ -480,8 +1388,7 @@ layer {
      }
      axis: 1
    }
-}   
-
+} 
 
 layer {
   name: "slice_label_1"
@@ -539,10 +1446,3 @@ layer {
   bottom: "reshape_label_2"
   top: "accuracy"
 }
-
-
-
-
-
-
-
