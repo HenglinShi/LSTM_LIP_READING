@@ -79,10 +79,13 @@ def insert_data_to_DB (data, batch_size, DB_NAME):
     DB_ENV.close()   
     
     
-def createSolver(solver_path, net_path, base_lr = 0.001):
+def createSolver(solver_path, train_net_path, test_net_path, snapshot_dest, base_lr = 0.001):
+    
     solver = caffe_pb2.SolverParameter()
     
-    solver.net = net_path
+    solver.net = train_net_path
+    
+    solver.test_net.append(test_net_path)
   
     solver.lr_policy = 'step'
     
@@ -106,7 +109,7 @@ def createSolver(solver_path, net_path, base_lr = 0.001):
     
     solver.snapshot = 5000
     
-    solver.snapshot_prefix = 'snapshot_lstm_lip_reading'
+    solver.snapshot_prefix = snapshot_dest + '/' + 'snapshot_lstm_lip_reading_fold_1'
     
     solver.solver_mode = caffe_pb2.SolverParameter().GPU
     
@@ -121,15 +124,12 @@ def createSolver(solver_path, net_path, base_lr = 0.001):
 
 
 def main ():
+   
     
-    data_path = "Data/V1"
+    working_dir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING'
+    input_mode = 'Front_Input'
+    data_version = 'Large'
     
-
-    batch_size_train = 60
-    batch_size_test = 20 
-    folds_CV = 5      
-          
-    DB_PREFIX = './Experiment/'      
     _DB_NAME_SAMPLE_TRAIN = '/SAMPLE_TRAIN'
     _DB_NAME_SAMPLE_TEST = '/SAMPLE_TEST'
     _DB_NAME_LABEL_TRAIN = '/LABEL_TRAIN'
@@ -140,16 +140,28 @@ def main ():
     _DB_NAME_LOGICAL_LABEL_TEST = '/LOGICAL_LABEL_TEST'  
     _DB_NAME_SAMPLE_INDEX_TRAIN = '/SAMPLE_INDEX_TRAIN'
     _DB_NAME_SAMPLE_INDEX_TEST = '/SAMPLE_INDEX_TEST'
+    
+    DB_PREFIX = os.path.join(working_dir, 'Experiment/Database', input_mode)  
+    DB_PREFIX = DB_PREFIX + '/'
+    
+    caffe.set_device(0)
+    caffe.set_device(1)
+    caffe.set_device(2)
+    caffe.set_device(3)
+    caffe.set_device(4)
+    caffe.set_device(5)
+    caffe.set_device(6)
+    caffe.set_device(7)
+    caffe.set_mode_gpu()
 
-    
-    
-    
-    
-    
+    batch_size_train = 60
+    batch_size_test = 20 
+    folds_CV = 5       
     
     
     
     # Load the data
+    data_path = os.path.join(working_dir, 'Data', data_version, 'V1')
     data = loadData(data_path)
     
     # Create splitting index
@@ -162,6 +174,8 @@ def main ():
     
     [speech_num_per_person, person_num, frame_num_per_speech, frame_height, frame_width,] = samples.shape
 
+    image_num_per_sequence = frame_num_per_speech
+    
     # Shuffling persons and dividing to training set and testing set
     person_index = np.linspace(0, person_num - 1, person_num).astype('int') 
     # person_index = range(pers)
@@ -180,9 +194,9 @@ def main ():
     caffe.set_mode_gpu()
     
     solver_max_iter = 50000
-    solver_test_interval = 2000
-    solver_test_iter = 150
-    test_times = (int)(np.ceil(float32(solver_max_iter) / float32(solver_test_interval)))
+    solver_test_interval = 500
+    solver_test_iter = 300
+    test_times = (int)(np.ceil(float32(solver_max_iter) / float32(solver_test_interval))) + 1
     
     test_acc = zeros((folds_CV, test_times))
       
@@ -285,12 +299,20 @@ def main ():
         insert_data_to_DB(labels_test[:,:,newaxis, newaxis, newaxis], batch_size_test, DB_NAME_LABEL_TEST)  
         
         
+        solver_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/solver.prototxt'
+        train_net_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/train_net.prototxt'
+        test_net_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/test_net.prototxt'
         
-        solver_path = './Experiment/' + str(ite_folds + 1) + '/solver.prototxt'
-        net_path = './Experiment/' + str(ite_folds + 1) + '/train_test_net.prototxt'
+        with open(train_net_path, 'w') as f:
+            train_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'train')
+            f.write(str(train_net.to_proto()))
+         
+        with open(test_net_path, 'w') as f:   
+            test_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test')
+            f.write(str(test_net.to_proto()))
         
         solver = None
-        solver = createSolver(solver_path, net_path, 0.01)
+        solver = createSolver(solver_path, train_net_path, test_net_path, working_dir + '/Experiment/Snapshot/' + input_mode, 0.01)
         with open(solver_path, 'w') as f:    
             f.write(str(solver))
     
@@ -301,14 +323,6 @@ def main ():
 
         while rest_train_iter > 0 :
             
-            if (int)(rest_train_iter / solver_test_interval) > 0:
-                solver.step(solver_test_interval)
-                       
-            else :
-                solver.step(rest_train_iter)
-            
-            rest_train_iter = rest_train_iter - solver_test_interval
-            
             correct = 0
             for iter_test in range(solver_test_iter):
                 
@@ -318,6 +332,16 @@ def main ():
             test_acc[ite_folds, test_index] = correct / solver_test_iter
             
             test_index = test_index + 1 
+            
+            if (int)(rest_train_iter / solver_test_interval) > 0:
+                solver.step(solver_test_interval)
+                       
+            else :
+                solver.step(rest_train_iter)
+            
+            rest_train_iter = rest_train_iter - solver_test_interval
+            
+            
     
     
     sio.savemat('./Output/acc.mat', {'acc':test_acc})

@@ -3,14 +3,14 @@ layer {
   type: "Data"
   top: "sample"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/SAMPLE_TRAIN"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/SAMPLE_TEST"
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -19,11 +19,11 @@ layer {
   type: "Data"
   top: "label"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   data_param {
-    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/LABEL_TRAIN"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/LABEL_TEST"
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -32,11 +32,11 @@ layer {
   type: "Data"
   top: "cm"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   data_param {
-    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/CLIP_MARKER_TRAIN"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/CLIP_MARKER_TEST"
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -45,11 +45,11 @@ layer {
   type: "Data"
   top: "si"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   data_param {
-    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/SAMPLE_INDEX_TRAIN"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Front_Input//1/SAMPLE_INDEX_TEST"
+    batch_size: 20
     backend: LMDB
   }
 }
@@ -161,12 +161,12 @@ layer {
   bottom: "dropout_1"
   top: "reshape_sample_1"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   reshape_param {
     shape {
       dim: 20
-      dim: 3
+      dim: 1
       dim: 4096
     }
   }
@@ -177,12 +177,12 @@ layer {
   bottom: "cm"
   top: "reshape_cm_1"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   reshape_param {
     shape {
       dim: 20
-      dim: 3
+      dim: 1
     }
   }
 }
@@ -232,60 +232,12 @@ layer {
   }
 }
 layer {
-  name: "slice_sample_1_1"
-  type: "Slice"
-  bottom: "ip_2"
-  top: "slice_sample_1_1"
-  top: "slice_sample_1_2"
-  top: "slice_sample_1_3"
-  include {
-    phase: TRAIN
-  }
-  slice_param {
-    slice_point: 1
-    slice_point: 2
-    axis: 1
-  }
-}
-layer {
   name: "reshape_sample_2_1"
   type: "Reshape"
-  bottom: "slice_sample_1_1"
+  bottom: "ip_2"
   top: "reshape_sample_2_1"
   include {
-    phase: TRAIN
-  }
-  reshape_param {
-    shape {
-      dim: 1
-      dim: 20
-      dim: 10
-    }
-  }
-}
-layer {
-  name: "reshape_sample_2_2"
-  type: "Reshape"
-  bottom: "slice_sample_1_2"
-  top: "reshape_sample_2_2"
-  include {
-    phase: TRAIN
-  }
-  reshape_param {
-    shape {
-      dim: 1
-      dim: 20
-      dim: 10
-    }
-  }
-}
-layer {
-  name: "reshape_sample_2_3"
-  type: "Reshape"
-  bottom: "slice_sample_1_3"
-  top: "reshape_sample_2_3"
-  include {
-    phase: TRAIN
+    phase: TEST
   }
   reshape_param {
     shape {
@@ -299,11 +251,9 @@ layer {
   name: "concate_sample_2"
   type: "Concat"
   bottom: "reshape_sample_2_1"
-  bottom: "reshape_sample_2_2"
-  bottom: "reshape_sample_2_3"
   top: "concate_sample_2"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   concat_param {
     axis: 0
@@ -364,23 +314,13 @@ layer {
   bottom: "slice_label_1_1"
   top: "reshape_label_2"
   include {
-    phase: TRAIN
+    phase: TEST
   }
   reshape_param {
     shape {
-      dim: 3
+      dim: 1
       dim: 1
     }
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "ip_3"
-  bottom: "reshape_label_2"
-  top: "loss"
-  include {
-    phase: TRAIN
   }
 }
 layer {
