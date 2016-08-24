@@ -1,0 +1,17 @@
+test_iter: 150
+test_interval: 2000
+base_lr: 0.01
+display: 2000
+max_iter: 50000
+lr_policy: "step"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.005
+stepsize: 10000
+snapshot: 5000
+snapshot_prefix: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Snapshot/snapshot_lstm_lip_reading_fold_1"
+solver_mode: GPU
+random_seed: 1701
+net: "./Experiment/1/train_test_net.prototxt"
+average_loss: 1000
+clip_gradients: 5

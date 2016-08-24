@@ -2,355 +2,294 @@ layer {
   name: "sample_v1"
   type: "Data"
   top: "sample_v1"
+  include {
+    phase: TEST
+  }
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/1/SAMPLE_TRAIN_V1"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsSAMPLE_TEST_V1"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
-
 layer {
   name: "sample_v2"
   type: "Data"
   top: "sample_v2"
+  include {
+    phase: TEST
+  }
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/1/SAMPLE_TRAIN_V2"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsSAMPLE_TEST_V2"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
-
 layer {
   name: "sample_v3"
   type: "Data"
   top: "sample_v3"
+  include {
+    phase: TEST
+  }
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/1/SAMPLE_TRAIN_V3"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsSAMPLE_TEST_V3"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
-
 layer {
   name: "sample_v4"
   type: "Data"
   top: "sample_v4"
+  include {
+    phase: TEST
+  }
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/1/SAMPLE_TRAIN_V4"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsSAMPLE_TEST_V4"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
 layer {
   name: "sample_v5"
   type: "Data"
   top: "sample_v5"
+  include {
+    phase: TEST
+  }
   transform_param {
     scale: 0.00390625
   }
   data_param {
-    source: "./Experiment/1/SAMPLE_TRAIN_V5"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsSAMPLE_TEST_V5"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
-
 layer {
   name: "label"
   type: "Data"
   top: "label"
+  include {
+    phase: TEST
+  }
   data_param {
-    source: "./Experiment/1/LABEL_TRAIN"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsLABEL_TEST"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
 layer {
-  name: "clip_marker"
+  name: "cm"
   type: "Data"
   top: "cm"
+  include {
+    phase: TEST
+  }
   data_param {
-    source: "./Experiment/1/CLIP_MARKER_TRAIN"
-    batch_size: 60
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsCLIP_MARKER_TEST"
+    batch_size: 20
     backend: LMDB
   }
-  include: { phase: TRAIN }
 }
 layer {
-  name: "sample_index"
+  name: "si"
   type: "Data"
   top: "si"
-  data_param {
-    source: "./Experiment/1/SAMPLE_INDEX_TRAIN"
-    batch_size: 60
-    backend: LMDB
-  }
-  include: { phase: TRAIN }
-}
-
-
-
-
-
-layer {
-  name: "sample_v1"
-  type: "Data"
-  top: "sample_v1"
-  transform_param {
-    scale: 0.00390625
+  include {
+    phase: TEST
   }
   data_param {
-    source: "./Experiment/1/SAMPLE_TEST_V1"
+    source: "/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Experiment/Database/Five_InputsSAMPLE_INDEX_TEST"
     batch_size: 20
     backend: LMDB
   }
-  include: { phase: TEST }
 }
-
-
-layer {
-  name: "sample_v2"
-  type: "Data"
-  top: "sample_v2"
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "./Experiment/1/SAMPLE_TEST_V2"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-
-
-layer {
-  name: "sample_v3"
-  type: "Data"
-  top: "sample_v3"
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "./Experiment/1/SAMPLE_TEST_V3"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-
-
-
-layer {
-  name: "sample_v4"
-  type: "Data"
-  top: "sample_v4"
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "./Experiment/1/SAMPLE_TEST_V4"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-
-
-layer {
-  name: "sample_v5"
-  type: "Data"
-  top: "sample_v5"
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "./Experiment/1/SAMPLE_TEST_V5"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-
-layer {
-  name: "label"
-  type: "Data"
-  top: "label"
-  data_param {
-    source: "./Experiment/1/LABEL_TEST"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-
-layer {
-  name: "clip_marker"
-  type: "Data"
-  top: "cm"
-  data_param {
-    source: "./Experiment/1/CLIP_MARKER_TEST"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-layer {
-  name: "sample_index"
-  type: "Data"
-  top: "si"
-  data_param {
-    source: "./Experiment/1/SAMPLE_INDEX_TEST"
-    batch_size: 20
-    backend: LMDB
-  }
-  include: { phase: TEST }
-}
-
-
 layer {
   name: "bn_1_v1"
   type: "BatchNorm"
   bottom: "sample_v1"
   top: "bn_1_v1"
 }
-
 layer {
   name: "bn_1_v2"
   type: "BatchNorm"
   bottom: "sample_v2"
   top: "bn_1_v2"
 }
-
 layer {
   name: "bn_1_v3"
   type: "BatchNorm"
   bottom: "sample_v3"
   top: "bn_1_v3"
 }
-
 layer {
   name: "bn_1_v4"
   type: "BatchNorm"
   bottom: "sample_v4"
   top: "bn_1_v4"
 }
-
 layer {
   name: "bn_1_v5"
   type: "BatchNorm"
   bottom: "sample_v5"
   top: "bn_1_v5"
 }
-
-
 layer {
   name: "scale_1_v1"
   type: "Scale"
   bottom: "bn_1_v1"
   top: "scale_1_v1"
-  scale_param {
-    bias_term: true
-  }
 }
-
 layer {
   name: "scale_1_v2"
   type: "Scale"
   bottom: "bn_1_v2"
   top: "scale_1_v2"
-  scale_param {
-    bias_term: true
-  }
 }
-
 layer {
-  name: "scale_1_3"
+  name: "scale_1_v3"
   type: "Scale"
   bottom: "bn_1_v3"
   top: "scale_1_v3"
-  scale_param {
-    bias_term: true
-  }
 }
-
 layer {
   name: "scale_1_v4"
   type: "Scale"
   bottom: "bn_1_v4"
   top: "scale_1_v4"
-  scale_param {
-    bias_term: true
-  }
 }
-
 layer {
   name: "scale_1_v5"
   type: "Scale"
   bottom: "bn_1_v5"
   top: "scale_1_v5"
-  scale_param {
-    bias_term: true
-  }
 }
-
 layer {
-  name: "relu_1_v1"
-  type: "ReLU"
+  name: "con_1_v1"
+  type: "Convolution"
   bottom: "scale_1_v1"
-  top: "relu_1_v1"
+  top: "con_1_v1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
 }
-
 layer {
-  name: "relu_1_v2"
-  type: "ReLU"
+  name: "con_1_v2"
+  type: "Convolution"
   bottom: "scale_1_v2"
-  top: "relu_1_v2"
+  top: "con_1_v2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
 }
 layer {
-  name: "relu_1_v3"
-  type: "ReLU"
+  name: "con_1_v3"
+  type: "Convolution"
   bottom: "scale_1_v3"
-  top: "relu_1_v3"
+  top: "con_1_v3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
 }
 layer {
-  name: "relu_1_v4"
-  type: "ReLU"
+  name: "con_1_v4"
+  type: "Convolution"
   bottom: "scale_1_v4"
-  top: "relu_1_v4"
+  top: "con_1_v4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
 }
 layer {
-  name: "relu_1_v5"
-  type: "ReLU"
+  name: "con_1_v5"
+  type: "Convolution"
   bottom: "scale_1_v5"
-  top: "relu_1_v5"
-}
-
-
-
-layer {
-  name: "conv_1_v1"
-  type: "Convolution"
-  bottom: "relu_1_v1"
-  top: "conv_1_v1"
+  top: "con_1_v5"
   param {
     lr_mult: 1
     decay_mult: 1
@@ -373,124 +312,10 @@ layer {
     }
   }
 }
-
-layer {
-  name: "conv_1_v2"
-  type: "Convolution"
-  bottom: "relu_1_v2"
-  top: "conv_1_v2"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  convolution_param {
-    num_output: 96
-    kernel_size: 7
-    stride: 2
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-  }
-}
-
-layer {
-  name: "conv_1_v3"
-  type: "Convolution"
-  bottom: "relu_1_v3"
-  top: "conv_1_v3"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  convolution_param {
-    num_output: 96
-    kernel_size: 7
-    stride: 2
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-  }
-}
-
-layer {
-  name: "conv_1_v4"
-  type: "Convolution"
-  bottom: "relu_1_v4"
-  top: "conv_1_v4"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  convolution_param {
-    num_output: 96
-    kernel_size: 7
-    stride: 2
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-  }
-}
-
-layer {
-  name: "conv_1_v5"
-  type: "Convolution"
-  bottom: "relu_1_v5"
-  top: "conv_1_v5"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  convolution_param {
-    num_output: 96
-    kernel_size: 7
-    stride: 2
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-  }
-}
-
-
 layer {
   name: "pooling_1_v1"
   type: "Pooling"
-  bottom: "conv_1_v1"
+  bottom: "con_1_v1"
   top: "pooling_1_v1"
   pooling_param {
     pool: MAX
@@ -498,11 +323,10 @@ layer {
     stride: 2
   }
 }
-
 layer {
   name: "pooling_1_v2"
   type: "Pooling"
-  bottom: "conv_1_v2"
+  bottom: "con_1_v2"
   top: "pooling_1_v2"
   pooling_param {
     pool: MAX
@@ -510,11 +334,10 @@ layer {
     stride: 2
   }
 }
-
 layer {
   name: "pooling_1_v3"
   type: "Pooling"
-  bottom: "conv_1_v3"
+  bottom: "con_1_v3"
   top: "pooling_1_v3"
   pooling_param {
     pool: MAX
@@ -522,11 +345,10 @@ layer {
     stride: 2
   }
 }
-
 layer {
   name: "pooling_1_v4"
   type: "Pooling"
-  bottom: "conv_1_v4"
+  bottom: "con_1_v4"
   top: "pooling_1_v4"
   pooling_param {
     pool: MAX
@@ -534,11 +356,10 @@ layer {
     stride: 2
   }
 }
-
 layer {
   name: "pooling_1_v5"
   type: "Pooling"
-  bottom: "conv_1_v5"
+  bottom: "con_1_v5"
   top: "pooling_1_v5"
   pooling_param {
     pool: MAX
@@ -546,7 +367,6 @@ layer {
     stride: 2
   }
 }
-
 layer {
   name: "bn_2_v1"
   type: "BatchNorm"
@@ -577,94 +397,70 @@ layer {
   bottom: "pooling_1_v5"
   top: "bn_2_v5"
 }
-
-
 layer {
   name: "scale_2_v1"
   type: "Scale"
   bottom: "bn_2_v1"
   top: "scale_2_v1"
-  scale_param {
-    bias_term: true
-  }
 }
 layer {
   name: "scale_2_v2"
   type: "Scale"
   bottom: "bn_2_v2"
   top: "scale_2_v2"
-  scale_param {
-    bias_term: true
-  }
 }
 layer {
   name: "scale_2_v3"
   type: "Scale"
   bottom: "bn_2_v3"
   top: "scale_2_v3"
-  scale_param {
-    bias_term: true
-  }
 }
 layer {
   name: "scale_2_v4"
   type: "Scale"
   bottom: "bn_2_v4"
   top: "scale_2_v4"
-  scale_param {
-    bias_term: true
-  }
 }
 layer {
   name: "scale_2_v5"
   type: "Scale"
   bottom: "bn_2_v5"
   top: "scale_2_v5"
-  scale_param {
-    bias_term: true
-  }
 }
-
 layer {
-  name: "relu_2_v1"
+  name: "relu_1_v1"
   type: "ReLU"
   bottom: "scale_2_v1"
-  top: "relu_2_v1"
+  top: "relu_1_v1"
 }
-
 layer {
-  name: "relu_2_v2"
+  name: "relu_1_v2"
   type: "ReLU"
   bottom: "scale_2_v2"
-  top: "relu_2_v2"
+  top: "relu_1_v2"
 }
-
 layer {
-  name: "relu_2_v3"
+  name: "relu_1_v3"
   type: "ReLU"
   bottom: "scale_2_v3"
-  top: "relu_2_v3"
+  top: "relu_1_v3"
 }
-
 layer {
-  name: "relu_2_v4"
+  name: "relu_1_v4"
   type: "ReLU"
   bottom: "scale_2_v4"
-  top: "relu_2_v4"
+  top: "relu_1_v4"
 }
-
 layer {
-  name: "relu_2_v5"
+  name: "relu_1_v5"
   type: "ReLU"
   bottom: "scale_2_v5"
-  top: "relu_2_v5"
+  top: "relu_1_v5"
 }
-
-
 layer {
   name: "ip_1_v1"
   type: "InnerProduct"
-  bottom: "relu_2_v1"
+  bottom: "relu_1_v1"
   top: "ip_1_v1"
   param {
     lr_mult: 1
@@ -686,11 +482,10 @@ layer {
     }
   }
 }
-
 layer {
   name: "ip_1_v2"
   type: "InnerProduct"
-  bottom: "relu_2_v2"
+  bottom: "relu_1_v2"
   top: "ip_1_v2"
   param {
     lr_mult: 1
@@ -712,11 +507,10 @@ layer {
     }
   }
 }
-
 layer {
   name: "ip_1_v3"
   type: "InnerProduct"
-  bottom: "relu_2_v3"
+  bottom: "relu_1_v3"
   top: "ip_1_v3"
   param {
     lr_mult: 1
@@ -738,11 +532,10 @@ layer {
     }
   }
 }
-
 layer {
   name: "ip_1_v4"
   type: "InnerProduct"
-  bottom: "relu_2_v4"
+  bottom: "relu_1_v4"
   top: "ip_1_v4"
   param {
     lr_mult: 1
@@ -764,11 +557,10 @@ layer {
     }
   }
 }
-
 layer {
   name: "ip_1_v5"
   type: "InnerProduct"
-  bottom: "relu_2_v5"
+  bottom: "relu_1_v5"
   top: "ip_1_v5"
   param {
     lr_mult: 1
@@ -790,119 +582,107 @@ layer {
     }
   }
 }
-
-
-layer {
-  name: "relu_3_v1"
-  type: "ReLU"
-  bottom: "ip_1_v1"
-  top: "relu_3_v1"
-}
-layer {
-  name: "relu_3_v2"
-  type: "ReLU"
-  bottom: "ip_1_v2"
-  top: "relu_3_v2"
-}
-layer {
-  name: "relu_3_v3"
-  type: "ReLU"
-  bottom: "ip_1_v3"
-  top: "relu_3_v3"
-}
-layer {
-  name: "relu_3_v4"
-  type: "ReLU"
-  bottom: "ip_1_v4"
-  top: "relu_3_v4"
-}
-layer {
-  name: "relu_3_v5"
-  type: "ReLU"
-  bottom: "ip_1_v5"
-  top: "relu_3_v5"
-}
-
 layer {
   name: "dropout_1_v1"
   type: "Dropout"
-  bottom: "relu_3_v1"
+  bottom: "ip_1_v1"
   top: "dropout_1_v1"
   dropout_param {
-    dropout_ratio: 0.9
+    dropout_ratio: 0.6
   }
 }
-
 layer {
   name: "dropout_1_v2"
   type: "Dropout"
-  bottom: "relu_3_v2"
+  bottom: "ip_1_v2"
   top: "dropout_1_v2"
   dropout_param {
-    dropout_ratio: 0.9
+    dropout_ratio: 0.6
   }
 }
 layer {
   name: "dropout_1_v3"
   type: "Dropout"
-  bottom: "relu_3_v3"
+  bottom: "ip_1_v3"
   top: "dropout_1_v3"
   dropout_param {
-    dropout_ratio: 0.9
+    dropout_ratio: 0.6
   }
 }
 layer {
   name: "dropout_1_v4"
   type: "Dropout"
-  bottom: "relu_3_v4"
+  bottom: "ip_1_v4"
   top: "dropout_1_v4"
   dropout_param {
-    dropout_ratio: 0.9
+    dropout_ratio: 0.6
   }
 }
 layer {
   name: "dropout_1_v5"
   type: "Dropout"
-  bottom: "relu_3_v5"
+  bottom: "ip_1_v5"
   top: "dropout_1_v5"
   dropout_param {
-    dropout_ratio: 0.9
+    dropout_ratio: 0.6
   }
 }
-
 layer {
   name: "reshape_sample_1_v1"
   type: "Reshape"
   bottom: "dropout_1_v1"
   top: "reshape_sample_1_v1"
+  include {
+    phase: TEST
+  }
   reshape_param {
     shape {
       dim: 20
-      dim: 3
+      dim: 1
       dim: 4096
     }
   }
-  include: { phase: TRAIN }
 }
 layer {
   name: "reshape_sample_1_v2"
   type: "Reshape"
   bottom: "dropout_1_v2"
   top: "reshape_sample_1_v2"
+  include {
+    phase: TEST
+  }
   reshape_param {
     shape {
       dim: 20
-      dim: 3
+      dim: 1
       dim: 4096
     }
   }
-  include: { phase: TRAIN }
 }
 layer {
   name: "reshape_sample_1_v3"
   type: "Reshape"
   bottom: "dropout_1_v3"
   top: "reshape_sample_1_v3"
+  include {
+    phase: TEST
+  }
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 1
+      dim: 4096
+    }
+  }
+}
+layer {
+  name: "reshape_sample_v4"
+  type: "Reshape"
+  bottom: "dropout_1_v4"
+  top: "reshape_sample_v4"
+  include {
+    phase: TRAIN
+  }
   reshape_param {
     shape {
       dim: 20
@@ -910,71 +690,31 @@ layer {
       dim: 4096
     }
   }
-  include: { phase: TRAIN }
+}
+layer {
+  name: "reshape_sample_v5"
+  type: "Reshape"
+  bottom: "dropout_1_v5"
+  top: "reshape_sample_v5"
+  include {
+    phase: TRAIN
+  }
+  reshape_param {
+    shape {
+      dim: 20
+      dim: 3
+      dim: 4096
+    }
+  }
 }
 layer {
   name: "reshape_sample_1_v4"
   type: "Reshape"
   bottom: "dropout_1_v4"
   top: "reshape_sample_1_v4"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 3
-      dim: 4096
-    }
+  include {
+    phase: TEST
   }
-  include: { phase: TRAIN }
-}
-
-layer {
-  name: "reshape_sample_1_v5"
-  type: "Reshape"
-  bottom: "dropout_1_v5"
-  top: "reshape_sample_1_v5"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 3
-      dim: 4096
-    }
-  }
-  include: { phase: TRAIN }
-}
-
-layer {
-  name: "reshape_label_1"
-  type: "Reshape"
-  bottom: "label"
-  top: "reshape_label_1"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 3
-    }
-  }
-  include: { phase: TRAIN }
-}
-layer {
-  name: "reshape_cm_1"
-  type: "Reshape"
-  bottom: "cm"
-  top: "reshape_cm_1"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 3
-    }
-  }
-  include: { phase: TRAIN }
-}
-
-
-layer {
-  name: "reshape_sample_1_v1"
-  type: "Reshape"
-  bottom: "dropout_1_v1"
-  top: "reshape_sample_1_v1"
   reshape_param {
     shape {
       dim: 20
@@ -982,93 +722,38 @@ layer {
       dim: 4096
     }
   }
-  include: { phase: TEST }
-}
-layer {
-  name: "reshape_sample_1_v2"
-  type: "Reshape"
-  bottom: "dropout_1_v2"
-  top: "reshape_sample_1_v2"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 1
-      dim: 4096
-    }
-  }
-  include: { phase: TEST }
-}
-layer {
-  name: "reshape_sample_1_v3"
-  type: "Reshape"
-  bottom: "dropout_1_v3"
-  top: "reshape_sample_1_v3"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 1
-      dim: 4096
-    }
-  }
-  include: { phase: TEST }
-}
-layer {
-  name: "reshape_sample_1_v4"
-  type: "Reshape"
-  bottom: "dropout_1_v4"
-  top: "reshape_sample_1_v4"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 1
-      dim: 4096
-    }
-  }
-  include: { phase: TEST }
 }
 layer {
   name: "reshape_sample_1_v5"
   type: "Reshape"
   bottom: "dropout_1_v5"
   top: "reshape_sample_1_v5"
+  include {
+    phase: TRAIN
+  }
   reshape_param {
     shape {
       dim: 20
-      dim: 1
+      dim: 3
       dim: 4096
     }
   }
-  include: { phase: TEST }
-}
-
-layer {
-  name: "reshape_label_1"
-  type: "Reshape"
-  bottom: "label"
-  top: "reshape_label_1"
-  reshape_param {
-    shape {
-      dim: 20
-      dim: 1
-    }
-  }
-  include: { phase: TEST }
 }
 layer {
   name: "reshape_cm_1"
   type: "Reshape"
   bottom: "cm"
   top: "reshape_cm_1"
+  include {
+    phase: TEST
+  }
   reshape_param {
     shape {
       dim: 20
       dim: 1
     }
   }
-  include: { phase: TEST }
 }
-
-
 layer {
   name: "lstm_1_v1"
   type: "LSTM"
@@ -1145,7 +830,6 @@ layer {
     }
   }
 }
-
 layer {
   name: "lstm_1_v5"
   type: "LSTM"
@@ -1165,70 +849,19 @@ layer {
     }
   }
 }
-
-layer {
-  name: "dropout_2_v1"
-  type: "Dropout"
-  bottom: "lstm_1_v1"
-  top: "dropout_2_v1"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "dropout_2_v2"
-  type: "Dropout"
-  bottom: "lstm_1_v2"
-  top: "dropout_2_v2"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "dropout_2_v3"
-  type: "Dropout"
-  bottom: "lstm_1_v3"
-  top: "dropout_2_v3"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "dropout_2_v4"
-  type: "Dropout"
-  bottom: "lstm_1_v4"
-  top: "dropout_2_v4"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "dropout_2_v5"
-  type: "Dropout"
-  bottom: "lstm_1_v5"
-  top: "dropout_2_v5"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-
-
-
 layer {
   name: "concate_sample_1"
-  bottom: "dropout_2_v1"
-  bottom: "dropout_2_v2"
-  bottom: "dropout_2_v3"
-  bottom: "dropout_2_v4"
-  bottom: "dropout_2_v5"
-  top: "concate_sample_1"
   type: "Concat"
+  bottom: "lstm_1_v1"
+  bottom: "lstm_1_v2"
+  bottom: "lstm_1_v3"
+  bottom: "lstm_1_v4"
+  bottom: "lstm_1_v5"
+  top: "concate_sample_1"
   concat_param {
     axis: 2
   }
 }
-
-
 layer {
   name: "ip_2"
   type: "InnerProduct"
@@ -1250,96 +883,35 @@ layer {
     }
     bias_filler {
       type: "constant"
-      value: 0
+      value: 0.1
     }
     axis: 2
   }
 }
-
-
 layer {
-  name: "slice_sample_1"
+  name: "slice_sample_1_1"
   type: "Slice"
   bottom: "ip_2"
   top: "slice_sample_1_1"
   top: "slice_sample_1_2"
   top: "slice_sample_1_3"
+  include {
+    phase: TRAIN
+  }
   slice_param {
-    axis: 1
     slice_point: 1
     slice_point: 2
+    axis: 1
   }
-  include: { phase: TRAIN }
 }
-
-
-
 layer {
   name: "reshape_sample_2_1"
-  bottom: "slice_sample_1_1"
-  top: "reshape_sample_2_1"
   type: "Reshape"
-  reshape_param {
-    shape {
-      dim: 1
-      dim: 20
-      dim: 10
-    }
-  }
-  include: { phase: TRAIN }
-}
-
-layer {
-  name: "reshape_sample_2_2"
-  bottom: "slice_sample_1_2"
-  top: "reshape_sample_2_2"
-  type: "Reshape"
-  reshape_param {
-    shape {
-      dim: 1
-      dim: 20
-      dim: 10
-    }
-  }
-  include: { phase: TRAIN }
-}
-
-layer {
-  name: "reshape_sample_2_3"
-  bottom: "slice_sample_1_3"
-  top: "reshape_sample_2_3"
-  type: "Reshape"
-  reshape_param {
-    shape {
-      dim: 1
-      dim: 20
-      dim: 10
-    }
-  }
-  include: { phase: TRAIN }
-}
-
-
-layer {
-  name: "concate_sample_2"
-  bottom: "reshape_sample_2_1"
-  bottom: "reshape_sample_2_2"
-  bottom: "reshape_sample_2_3"
-  top: "concate_sample_2"
-  type: "Concat"
-  concat_param {
-    axis: 0
-  }
-  include: { phase: TRAIN }
-}
-
-
-
-layer {
-  name: "reshape_sample_2_1"
   bottom: "ip_2"
   top: "reshape_sample_2_1"
-  type: "Reshape"
+  include {
+    phase: TEST
+  }
   reshape_param {
     shape {
       dim: 1
@@ -1347,97 +919,124 @@ layer {
       dim: 10
     }
   }
-  include: { phase: TEST }
 }
-
-
+layer {
+  name: "reshape_sample_2_2"
+  type: "Reshape"
+  bottom: "slice_sample_1_2"
+  top: "reshape_sample_2_2"
+  include {
+    phase: TRAIN
+  }
+  reshape_param {
+    shape {
+      dim: 1
+      dim: 20
+      dim: 10
+    }
+  }
+}
+layer {
+  name: "reshape_sample_2_3"
+  type: "Reshape"
+  bottom: "slice_sample_1_3"
+  top: "reshape_sample_2_3"
+  include {
+    phase: TRAIN
+  }
+  reshape_param {
+    shape {
+      dim: 1
+      dim: 20
+      dim: 10
+    }
+  }
+}
 layer {
   name: "concate_sample_2"
+  type: "Concat"
   bottom: "reshape_sample_2_1"
   top: "concate_sample_2"
-  type: "Concat"
+  include {
+    phase: TEST
+  }
   concat_param {
     axis: 0
   }
-  include: { phase: TEST }
 }
-
-
 layer {
-   name: "ip_3"
-   bottom: "concate_sample_2"
-   top: "ip_3"
-   type: "InnerProduct"
-   param {
-     lr_mult: 1
-     decay_mult: 1
-   }
-   param {
-     lr_mult: 2
-     decay_mult: 0
-   }
-   inner_product_param {
-     num_output: 10
-     weight_filler {
-       type: "gaussian"
-       std: 0.01
-     }
-     bias_filler {
-       type: "constant"
-       value: 0
-     }
-     axis: 1
-   }
-} 
-
+  name: "ip_3"
+  type: "InnerProduct"
+  bottom: "concate_sample_2"
+  top: "ip_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+    axis: 1
+  }
+}
 layer {
-  name: "slice_label_1"
+  name: "reshape_label_1"
+  type: "Reshape"
+  bottom: "label"
+  top: "reshape_label_1"
+  reshape_param {
+    shape {
+      dim: 20
+      dim: -1
+    }
+  }
+}
+layer {
+  name: "slice_label_1_1"
   type: "Slice"
   bottom: "reshape_label_1"
   top: "slice_label_1_1"
   top: "slice_label_1_2"
   slice_param {
-    axis: 0
     slice_point: 1
+    axis: 0
   }
 }
-
-
 layer {
   name: "reshape_label_2"
+  type: "Reshape"
   bottom: "slice_label_1_1"
   top: "reshape_label_2"
-  type: "Reshape"
-  reshape_param {
-    shape {
-      dim: 3
-      dim: 1
-    }
+  include {
+    phase: TEST
   }
-  include: { phase: TRAIN }
-}
-
-layer {
-  name: "reshape_label_2"
-  bottom: "slice_label_1_1"
-  top: "reshape_label_2"
-  type: "Reshape"
   reshape_param {
     shape {
       dim: 1
       dim: 1
     }
   }
-  include: { phase: TEST }
 }
-
 layer {
   name: "loss"
   type: "SoftmaxWithLoss"
   bottom: "ip_3"
   bottom: "reshape_label_2"
   top: "loss"
-  include: { phase: TRAIN }
+  include {
+    phase: TRAIN
+  }
 }
 layer {
   name: "accuracy"
@@ -1445,4 +1044,7 @@ layer {
   bottom: "ip_3"
   bottom: "reshape_label_2"
   top: "accuracy"
+  include {
+    phase: TEST
+  }
 }
