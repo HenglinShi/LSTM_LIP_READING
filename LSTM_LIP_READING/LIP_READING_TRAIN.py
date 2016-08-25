@@ -144,13 +144,11 @@ def main ():
     DB_PREFIX = os.path.join(working_dir, 'Experiment/Database', input_mode)  
     DB_PREFIX = DB_PREFIX + '/'
     
-    caffe.set_device(0)
+
     caffe.set_device(1)
     caffe.set_device(2)
     caffe.set_device(3)
-    caffe.set_device(4)
-    caffe.set_device(5)
-    caffe.set_device(6)
+
     caffe.set_device(7)
     caffe.set_mode_gpu()
 

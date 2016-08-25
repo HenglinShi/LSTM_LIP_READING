@@ -116,18 +116,30 @@ def creatNet(DB_PREFIX,
 
     # Convolution layers 1
     net.con_1 = L.Convolution(net.scale_1,
-                                 param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 96,
-                                                    'kernel_size': 7,
-                                                    'stride': 2,
-                                                    'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                    'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, 
+                                        {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
 
     
+    net.con_2 = L.Convolution(net.con_1,
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, 
+                                        {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    
+    
+    
     # Pooling layer 1
-    net.pooling_1 = L.Pooling(net.con_1,
+    net.pooling_1 = L.Pooling(net.con_2,
                                  pooling_param={'pool': P.Pooling.MAX,
-                                                'kernel_size': 3,
+                                                'kernel_size': 2,
                                                 'stride': 2})
    
     
@@ -150,8 +162,8 @@ def creatNet(DB_PREFIX,
                                  param=[{'lr_mult': 1, 'decay_mult': 1},
                                         {'lr_mult': 2, 'decay_mult': 0}],
                                  inner_product_param={'num_output': 4096,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0}})
     
     # Droout 1
 
@@ -199,21 +211,25 @@ def creatNet(DB_PREFIX,
 
     net.lstm_1 = L.LSTM(net.reshape_sample_1,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min':-0.01, 'max': 0.01},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})
+                        recurrent_param={'num_output': 1024,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0}})
 
    
-    
+    net.lstm_2 = L.LSTM(net.lstm_1,
+                        net.reshape_cm_1,
+                        recurrent_param={'num_output': 256,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0}})
     
     # IP 2
     
-    net.ip_2 = L.InnerProduct(net.lstm_1,
+    net.ip_2 = L.InnerProduct(net.lstm_2,
                               param=[{'lr_mult': 1, 'decay_mult': 1},
                                      {'lr_mult': 2, 'decay_mult': 0}],
                               inner_product_param={'num_output': 10,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1},
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0},
                                                       'axis':2})
     
     # Slice train ip_2
@@ -282,8 +298,8 @@ def creatNet(DB_PREFIX,
                               param=[{'lr_mult': 1, 'decay_mult': 1},
                                      {'lr_mult': 2, 'decay_mult': 0}],
                               inner_product_param={'num_output': 10,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1},
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0},
                                                       'axis':1})
     
     

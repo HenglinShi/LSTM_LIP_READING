@@ -79,27 +79,52 @@ layer {
     decay_mult: 0
   }
   convolution_param {
-    num_output: 96
-    kernel_size: 7
-    stride: 2
+    num_output: 64
+    kernel_size: 3
+    stride: 1
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "xavier"
     }
     bias_filler {
       type: "constant"
-      value: 0.1
+      value: 0
+    }
+  }
+}
+layer {
+  name: "con_2"
+  type: "Convolution"
+  bottom: "con_1"
+  top: "con_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
     }
   }
 }
 layer {
   name: "pooling_1"
   type: "Pooling"
-  bottom: "con_1"
+  bottom: "con_2"
   top: "pooling_1"
   pooling_param {
     pool: MAX
-    kernel_size: 3
+    kernel_size: 2
     stride: 2
   }
 }
@@ -137,12 +162,11 @@ layer {
   inner_product_param {
     num_output: 4096
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "xavier"
     }
     bias_filler {
       type: "constant"
-      value: 0.1
+      value: 0
     }
   }
 }
@@ -193,11 +217,26 @@ layer {
   bottom: "reshape_cm_1"
   top: "lstm_1"
   recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "lstm_2"
+  type: "LSTM"
+  bottom: "lstm_1"
+  bottom: "reshape_cm_1"
+  top: "lstm_2"
+  recurrent_param {
     num_output: 256
     weight_filler {
-      type: "uniform"
-      min: -0.01
-      max: 0.01
+      type: "xavier"
     }
     bias_filler {
       type: "constant"
@@ -208,7 +247,7 @@ layer {
 layer {
   name: "ip_2"
   type: "InnerProduct"
-  bottom: "lstm_1"
+  bottom: "lstm_2"
   top: "ip_2"
   param {
     lr_mult: 1
@@ -221,12 +260,11 @@ layer {
   inner_product_param {
     num_output: 10
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "xavier"
     }
     bias_filler {
       type: "constant"
-      value: 0.1
+      value: 0
     }
     axis: 2
   }
@@ -325,12 +363,11 @@ layer {
   inner_product_param {
     num_output: 10
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "xavier"
     }
     bias_filler {
       type: "constant"
-      value: 0.1
+      value: 0
     }
     axis: 1
   }
