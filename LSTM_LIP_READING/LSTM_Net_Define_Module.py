@@ -195,69 +195,115 @@ def creatNet(DB_PREFIX,
     # #V1
     net.con_1_v1 = L.Convolution(net.scale_1_v1,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 96,
-                                                    'kernel_size': 7,
-                                                    'stride': 2,
-                                                    'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                    'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
     # #v2
     net.con_1_v2 = L.Convolution(net.scale_1_v2,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 96,
-                                                    'kernel_size': 7,
-                                                    'stride': 2,
-                                                    'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                    'bias_filler': {'type': 'constant', 'value': 0.1}})    
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
     # #v3
     net.con_1_v3 = L.Convolution(net.scale_1_v3,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 96,
-                                                    'kernel_size': 7,
-                                                    'stride': 2,
-                                                    'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                    'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
     # #v4
     net.con_1_v4 = L.Convolution(net.scale_1_v4,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 96,
-                                                    'kernel_size': 7,
-                                                    'stride': 2,
-                                                    'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                    'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
     # #v5
     net.con_1_v5 = L.Convolution(net.scale_1_v5,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 96,
-                                                    'kernel_size': 7,
-                                                    'stride': 2,
-                                                    'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                    'bias_filler': {'type': 'constant', 'value': 0.1}})    
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    
+    
+        # Convolution layers 2
+    # #V1
+    net.con_2_v1 = L.Convolution(net.con_1_v1,
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    # #v2
+    net.con_2_v2 = L.Convolution(net.con_1_v2,
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    # #v3
+    net.con_2_v3 = L.Convolution(net.con_1_v3,
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    # #v4
+    net.con_2_v4 = L.Convolution(net.con_1_v4,
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    # #v5
+    net.con_2_v5 = L.Convolution(net.con_1_v5,
+                                 param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
+                                 convolution_param={'num_output': 64,
+                                                    'kernel_size': 3,
+                                                    'stride': 1,
+                                                    'weight_filler': {'type': 'xavier'},
+                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+    
+    
+    
     
     # Pooling layer 1
     # #v1
-    net.pooling_1_v1 = L.Pooling(net.con_1_v1,
+    net.pooling_1_v1 = L.Pooling(net.con_2_v1,
                                  pooling_param={'pool': P.Pooling.MAX,
-                                                'kernel_size': 3,
+                                                'kernel_size': 2,
                                                 'stride': 2})
     # #v2
-    net.pooling_1_v2 = L.Pooling(net.con_1_v2,
+    net.pooling_1_v2 = L.Pooling(net.con_2_v2,
                                  pooling_param={'pool': P.Pooling.MAX,
-                                                'kernel_size': 3,
+                                                'kernel_size': 2,
                                                 'stride': 2})
     # #v3
-    net.pooling_1_v3 = L.Pooling(net.con_1_v3,
+    net.pooling_1_v3 = L.Pooling(net.con_2_v3,
                                  pooling_param={'pool': P.Pooling.MAX,
-                                                'kernel_size': 3,
+                                                'kernel_size': 2,
                                                 'stride': 2})
     # #v4
-    net.pooling_1_v4 = L.Pooling(net.con_1_v4,
+    net.pooling_1_v4 = L.Pooling(net.con_2_v4,
                                  pooling_param={'pool': P.Pooling.MAX,
-                                                'kernel_size': 3,
+                                                'kernel_size': 2,
                                                 'stride': 2})
     # #v5
-    net.pooling_1_v5 = L.Pooling(net.con_1_v5,
+    net.pooling_1_v5 = L.Pooling(net.con_2_v5,
                                  pooling_param={'pool': P.Pooling.MAX,
-                                                'kernel_size': 3,
+                                                'kernel_size': 2,
                                                 'stride': 2})
     
     
@@ -305,36 +351,36 @@ def creatNet(DB_PREFIX,
                                  param=[{'lr_mult': 1, 'decay_mult': 1},
                                         {'lr_mult': 2, 'decay_mult': 0}],
                                  inner_product_param={'num_output': 4096,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0}})
     # #v2
     net.ip_1_v2 = L.InnerProduct(net.relu_1_v2,
                                  param=[{'lr_mult': 1, 'decay_mult': 1},
                                         {'lr_mult': 2, 'decay_mult': 0}],
                                  inner_product_param={'num_output': 4096,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0}})
     # #v3
     net.ip_1_v3 = L.InnerProduct(net.relu_1_v3,
                                  param=[{'lr_mult': 1, 'decay_mult': 1},
                                         {'lr_mult': 2, 'decay_mult': 0}],
                                  inner_product_param={'num_output': 4096,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0}})
     # #v4
     net.ip_1_v4 = L.InnerProduct(net.relu_1_v4,
                                  param=[{'lr_mult': 1, 'decay_mult': 1},
                                         {'lr_mult': 2, 'decay_mult': 0}],
                                  inner_product_param={'num_output': 4096,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0}})
     # #v5
     net.ip_1_v5 = L.InnerProduct(net.relu_1_v5,
                                  param=[{'lr_mult': 1, 'decay_mult': 1},
                                         {'lr_mult': 2, 'decay_mult': 0}],
                                  inner_product_param={'num_output': 4096,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1}})
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0}})
     # Droout 1
     # #v1
     net.dropout_1_v1 = L.Dropout(net.ip_1_v1,
@@ -440,42 +486,73 @@ def creatNet(DB_PREFIX,
     # # V1
     net.lstm_1_v1 = L.LSTM(net.reshape_sample_1_v1,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min':-0.01, 'max': 0.01},
+                        recurrent_param={'num_output': 1024,
+                                           'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
 
     # #v2
     net.lstm_1_v2 = L.LSTM(net.reshape_sample_1_v2,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min':-0.01, 'max': 0.01},
+                        recurrent_param={'num_output': 1024,
+                                           'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     # #v3
     net.lstm_1_v3 = L.LSTM(net.reshape_sample_1_v3,
                            net.reshape_cm_1,
-                           recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min':-0.01, 'max': 0.01},
+                           recurrent_param={'num_output': 1024,
+                                           'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     # #v4
     net.lstm_1_v4 = L.LSTM(net.reshape_sample_1_v4,
                            net.reshape_cm_1,
-                           recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min':-0.01, 'max': 0.01},
+                           recurrent_param={'num_output': 1024,
+                                           'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     # #v5
     net.lstm_1_v5 = L.LSTM(net.reshape_sample_1_v5,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'uniform', 'min':-0.01, 'max': 0.01},
+                        recurrent_param={'num_output': 1024,
+                                           'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     
-    
+    # LSTM LAYER 2
+    # # V1
+    net.lstm_2_v1 = L.LSTM(net.lstm_1_v1,
+                        net.reshape_cm_1,
+                        recurrent_param={'num_output': 256,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0 }})
+
+    # #v2
+    net.lstm_2_v2 = L.LSTM(net.lstm_1_v2,
+                        net.reshape_cm_1,
+                        recurrent_param={'num_output': 256,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0 }})
+    # #v3
+    net.lstm_2_v3 = L.LSTM(net.lstm_1_v3,
+                           net.reshape_cm_1,
+                           recurrent_param={'num_output': 256,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0 }})
+    # #v4
+    net.lstm_2_v4 = L.LSTM(net.lstm_1_v4,
+                           net.reshape_cm_1,
+                           recurrent_param={'num_output': 256,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0 }})
+    # #v5
+    net.lstm_2_v5 = L.LSTM(net.lstm_1_v5,
+                        net.reshape_cm_1,
+                        recurrent_param={'num_output': 256,
+                                           'weight_filler': {'type': 'xavier'},
+                                           'bias_filler': {'type': 'constant', 'value': 0 }})    
     # Concate sample 1
-    net.concate_sample_1 = L.Concat(net.lstm_1_v1,
-                                    net.lstm_1_v2,
-                                    net.lstm_1_v3,
-                                    net.lstm_1_v4,
-                                    net.lstm_1_v5,
+    net.concate_sample_1 = L.Concat(net.lstm_2_v1,
+                                    net.lstm_2_v2,
+                                    net.lstm_2_v3,
+                                    net.lstm_2_v4,
+                                    net.lstm_2_v5,
                                     concat_param={'axis': 2})
     
     # IP 2
@@ -484,8 +561,8 @@ def creatNet(DB_PREFIX,
                               param=[{'lr_mult': 1, 'decay_mult': 1},
                                      {'lr_mult': 2, 'decay_mult': 0}],
                               inner_product_param={'num_output': 10,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1},
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0},
                                                       'axis':2})
     
     # Slice train ip_2
@@ -554,8 +631,8 @@ def creatNet(DB_PREFIX,
                               param=[{'lr_mult': 1, 'decay_mult': 1},
                                      {'lr_mult': 2, 'decay_mult': 0}],
                               inner_product_param={'num_output': 10,
-                                                      'weight_filler': {'type': 'gaussian', 'std': 0.01},
-                                                      'bias_filler': {'type': 'constant', 'value': 0.1},
+                                                      'weight_filler': {'type': 'xavier'},
+                                                      'bias_filler': {'type': 'constant', 'value': 0},
                                                       'axis':1})
     
     

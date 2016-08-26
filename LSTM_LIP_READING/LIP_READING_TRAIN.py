@@ -226,21 +226,14 @@ def prepareData(DB_PREFIX, data, data_version, person_index_train, person_index_
 
 def main ():
     
-    caffe.set_device(0)
-    caffe.set_device(1)
-    caffe.set_device(2)
-    caffe.set_device(3)
-    caffe.set_device(4)
-    caffe.set_device(5)
     caffe.set_device(6)
-    caffe.set_device(7)
+
     caffe.set_mode_gpu()
-    
     
     
     working_dir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING'
     input_mode = 'Five_Inputs'
-    data_version = 'Large'
+    data_version = 'Small'
     
     
     data_v1_path = os.path.join(working_dir, 'Data', data_version, 'V1')
@@ -278,9 +271,7 @@ def main ():
     
     step_CV = np.floor(person_num / folds_CV)
 
-  
-    caffe.set_device(0)
-    caffe.set_mode_gpu()
+
     
     solver_max_iter = 50000
     solver_test_interval = 500
