@@ -200,7 +200,8 @@ def main ():
       
     
     
-    for ite_folds in range(folds_CV):
+    #for ite_folds in range(folds_CV):
+    for ite_folds in range(1):   
         
         nn = ite_folds + 1     
                        
@@ -218,10 +219,16 @@ def main ():
         
 
         
-        person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
-        person_index_train = np.setdiff1d(person_index, person_index_test)
+        #person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
+        #person_index_train = np.setdiff1d(person_index, person_index_test)
+        person_index_train = np.array([1, 2, 3, 4, 5, 7, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 30,
+                               31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 44, 45, 46, 47, 49, 52])
         
-        rd.shuffle(person_index_train)
+        person_index_train = person_index_train - 1
+        
+        person_index_test = np.array([6, 8, 9, 15, 26, 29, 33, 42, 43, 48, 50, 51])
+        person_index_test = person_index_test - 1
+        #rd.shuffle(person_index_train)
         
         #person_index[[0:(step_CV * ite_folds)], [(step_CV * ite_folds + step_CV) : person_num]]
             

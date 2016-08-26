@@ -241,26 +241,26 @@ def creatNet(DB_PREFIX,
 
     net.lstm_1 = L.LSTM(net.reshape_sample_1,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 1024,
+                        recurrent_param={'num_output': 256,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0}})
 
    
-    net.lstm_2 = L.LSTM(net.lstm_1,
-                        net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'xavier'},
-                                           'bias_filler': {'type': 'constant', 'value': 0}})
-    
+  #  net.lstm_2 = L.LSTM(net.lstm_1,
+  #                      net.reshape_cm_1,
+     #                   recurrent_param={'num_output': 256,
+     #                                      'weight_filler': {'type': 'xavier'},
+         #                                  'bias_filler': {'type': 'constant', 'value': 0}})
+    #
     
     # # TRAIN
     if test_or_train == 'train':
-        net.reshape_sample_3 = L.Reshape(net.lstm_2,
+        net.reshape_sample_3 = L.Reshape(net.lstm_1,
                                          reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
                                          include = {'phase': 0})   
     
     else:
-        net.reshape_sample_3 = L.Reshape(net.lstm_2,
+        net.reshape_sample_3 = L.Reshape(net.lstm_1,
                                          reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
                                          include = {'phase': 1})   
     
