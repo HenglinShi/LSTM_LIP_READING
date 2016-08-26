@@ -128,7 +128,7 @@ def main ():
     
     working_dir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING'
     input_mode = 'Front_Input'
-    data_version = 'Large'
+    data_version = 'Small'
     
     _DB_NAME_SAMPLE_TRAIN = '/SAMPLE_TRAIN'
     _DB_NAME_SAMPLE_TEST = '/SAMPLE_TEST'
@@ -302,11 +302,12 @@ def main ():
         test_net_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/test_net.prototxt'
         
         with open(train_net_path, 'w') as f:
-            train_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'train')
+            train_net = creatNet(DB_PREFIX + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'train')
             f.write(str(train_net.to_proto()))
+
          
         with open(test_net_path, 'w') as f:   
-            test_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test')
+            test_net = creatNet(DB_PREFIX + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test')
             f.write(str(test_net.to_proto()))
         
         solver = None

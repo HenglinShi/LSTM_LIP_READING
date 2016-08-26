@@ -108,11 +108,24 @@ def creatNet(DB_PREFIX,
     
     
     # Batch norm layers
-    net.bn_1 = L.BatchNorm(net.sample)
+    # ##Train
+    if test_or_train == 'train':
+        net.bn_1 = L.BatchNorm(net.sample,
+                           batch_norm_param = {'use_global_stats': False},
+                           include =  {'phase': 0})
 
+    else:
+        net.bn_1 = L.BatchNorm(net.sample,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+                           
   
     # Scale layers 1
-    net.scale_1 = L.Scale(net.bn_1)
+    net.scale_1 = L.Scale(net.bn_1,
+                          scale_param = {'bias_term': True })
 
     # Convolution layers 1
     net.con_1 = L.Convolution(net.scale_1,
@@ -143,13 +156,30 @@ def creatNet(DB_PREFIX,
                                                 'stride': 2})
    
     
-    
+    # Batch norm layers
+    # ##Train
+    if test_or_train == 'train':
+        net.bn_2 = L.BatchNorm(net.pooling_1,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+
+    else:
+        net.bn_2 = L.BatchNorm(net.pooling_1,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+                           
     # Barch normalizaiton layer 2
-    net.bn_2 = L.BatchNorm(net.pooling_1)
     
     
     # Scale layers 2
-    net.scale_2 = L.Scale(net.bn_2)
+    net.scale_2 = L.Scale(net.bn_2,
+                          scale_param = {'bias_term': True })
+    
+    
+
     
     
     
@@ -222,9 +252,60 @@ def creatNet(DB_PREFIX,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0}})
     
+    
+    # # TRAIN
+    if test_or_train == 'train':
+        net.reshape_sample_3 = L.Reshape(net.lstm_2,
+                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+                                         include = {'phase': 0})   
+    
+    else:
+        net.reshape_sample_3 = L.Reshape(net.lstm_2,
+                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+                                         include = {'phase': 1})   
+    
+    
+    
+    
+    
+    
+    # Barch normalizaiton layer 3
+    # Batch norm layers
+    # ##Train
+    if test_or_train == 'train':
+        net.bn_3 = L.BatchNorm(net.reshape_sample_3,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+
+    else:
+        net.bn_3 = L.BatchNorm(net.reshape_sample_3,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+                           
+    # Barch normalizaiton layer 2
+    
+    
+    # Scale layers 2
+    net.scale_3 = L.Scale(net.bn_3,
+                          scale_param = {'bias_term': True })
+    
+
+    
+    
+    # RELU layer 2
+    net.relu_2 = L.ReLU(net.scale_3)
+
+    
+    net.reshape_sample_4 = L.Reshape(net.relu_2,
+                            reshape_param={'shape': {'dim': [image_num_per_sequence, -1, 256] } })   
+    
+    
     # IP 2
     
-    net.ip_2 = L.InnerProduct(net.lstm_2,
+    net.ip_2 = L.InnerProduct(net.reshape_sample_4,
                               param=[{'lr_mult': 1, 'decay_mult': 1},
                                      {'lr_mult': 2, 'decay_mult': 0}],
                               inner_product_param={'num_output': 10,
