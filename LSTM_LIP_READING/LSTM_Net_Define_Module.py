@@ -486,73 +486,232 @@ def creatNet(DB_PREFIX,
     # # V1
     net.lstm_1_v1 = L.LSTM(net.reshape_sample_1_v1,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 1024,
+                        recurrent_param={'num_output': 256,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
 
     # #v2
     net.lstm_1_v2 = L.LSTM(net.reshape_sample_1_v2,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 1024,
+                        recurrent_param={'num_output': 256,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     # #v3
     net.lstm_1_v3 = L.LSTM(net.reshape_sample_1_v3,
                            net.reshape_cm_1,
-                           recurrent_param={'num_output': 1024,
+                           recurrent_param={'num_output': 256,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     # #v4
     net.lstm_1_v4 = L.LSTM(net.reshape_sample_1_v4,
                            net.reshape_cm_1,
-                           recurrent_param={'num_output': 1024,
+                           recurrent_param={'num_output': 256,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     # #v5
     net.lstm_1_v5 = L.LSTM(net.reshape_sample_1_v5,
                         net.reshape_cm_1,
-                        recurrent_param={'num_output': 1024,
+                        recurrent_param={'num_output': 256,
                                            'weight_filler': {'type': 'xavier'},
                                            'bias_filler': {'type': 'constant', 'value': 0 }})
     
-    # LSTM LAYER 2
-    # # V1
-    net.lstm_2_v1 = L.LSTM(net.lstm_1_v1,
-                        net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'xavier'},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})
+#     # LSTM LAYER 2
+#     # # V1
+#     net.lstm_2_v1 = L.LSTM(net.lstm_1_v1,
+#                         net.reshape_cm_1,
+#                         recurrent_param={'num_output': 256,
+#                                            'weight_filler': {'type': 'xavier'},
+#                                            'bias_filler': {'type': 'constant', 'value': 0 }})
+# 
+#     # #v2
+#     net.lstm_2_v2 = L.LSTM(net.lstm_1_v2,
+#                         net.reshape_cm_1,
+#                         recurrent_param={'num_output': 256,
+#                                            'weight_filler': {'type': 'xavier'},
+#                                            'bias_filler': {'type': 'constant', 'value': 0 }})
+#     # #v3
+#     net.lstm_2_v3 = L.LSTM(net.lstm_1_v3,
+#                            net.reshape_cm_1,
+#                            recurrent_param={'num_output': 256,
+#                                            'weight_filler': {'type': 'xavier'},
+#                                            'bias_filler': {'type': 'constant', 'value': 0 }})
+#     # #v4
+#     net.lstm_2_v4 = L.LSTM(net.lstm_1_v4,
+#                            net.reshape_cm_1,
+#                            recurrent_param={'num_output': 256,
+#                                            'weight_filler': {'type': 'xavier'},
+#                                            'bias_filler': {'type': 'constant', 'value': 0 }})
+#     # #v5
+#     net.lstm_2_v5 = L.LSTM(net.lstm_1_v5,
+#                         net.reshape_cm_1,
+#                         recurrent_param={'num_output': 256,
+#                                            'weight_filler': {'type': 'xavier'},
+#                                            'bias_filler': {'type': 'constant', 'value': 0 }})    
+    
+    # # TRAIN
+    if test_or_train == 'train':
+        net.reshape_sample_3_v1 = L.Reshape(net.lstm_1_v1,
+                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+                                         include = {'phase': 0})   
+        
+        net.reshape_sample_3_v2 = L.Reshape(net.lstm_1_v2,
+                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+                                         include = {'phase': 0})   
+        
+        net.reshape_sample_3_v3 = L.Reshape(net.lstm_1_v3,
+                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+                                         include = {'phase': 0})   
+        
+        net.reshape_sample_3_v4 = L.Reshape(net.lstm_1_v4,
+                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+                                         include = {'phase': 0})   
+        
+        net.reshape_sample_3_v5 = L.Reshape(net.lstm_1_v5,
+                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+                                         include = {'phase': 0})   
+    
+    
+    else:
+        net.reshape_sample_3_v1 = L.Reshape(net.lstm_1_v1,
+                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+                                         include = {'phase': 1})   
+    
+        net.reshape_sample_3_v2 = L.Reshape(net.lstm_1_v2,
+                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+                                         include = {'phase': 1})  
+        
+        net.reshape_sample_3_v3 = L.Reshape(net.lstm_1_v3,
+                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+                                         include = {'phase': 1})  
+        
+        net.reshape_sample_3_v4 = L.Reshape(net.lstm_1_v4,
+                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+                                         include = {'phase': 1})  
+        
+        net.reshape_sample_3_v5 = L.Reshape(net.lstm_1_v5,
+                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+                                         include = {'phase': 1})  
+    
+    
+    
+    
+    # Barch normalizaiton layer 3
+    # Batch norm layers
+    # ##Train
+    if test_or_train == 'train':
+        
+        net.bn_3_v1 = L.BatchNorm(net.reshape_sample_3_v1,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_3_v2 = L.BatchNorm(net.reshape_sample_3_v2,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_3_v3 = L.BatchNorm(net.reshape_sample_3_v3,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_3_v4 = L.BatchNorm(net.reshape_sample_3_v4,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_3_v5 = L.BatchNorm(net.reshape_sample_3_v5,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
 
-    # #v2
-    net.lstm_2_v2 = L.LSTM(net.lstm_1_v2,
-                        net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'xavier'},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})
-    # #v3
-    net.lstm_2_v3 = L.LSTM(net.lstm_1_v3,
-                           net.reshape_cm_1,
-                           recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'xavier'},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})
-    # #v4
-    net.lstm_2_v4 = L.LSTM(net.lstm_1_v4,
-                           net.reshape_cm_1,
-                           recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'xavier'},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})
-    # #v5
-    net.lstm_2_v5 = L.LSTM(net.lstm_1_v5,
-                        net.reshape_cm_1,
-                        recurrent_param={'num_output': 256,
-                                           'weight_filler': {'type': 'xavier'},
-                                           'bias_filler': {'type': 'constant', 'value': 0 }})    
+    else:
+        net.bn_3_v1 = L.BatchNorm(net.reshape_sample_3_v1,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_3_v2 = L.BatchNorm(net.reshape_sample_3_v2,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_3_v3 = L.BatchNorm(net.reshape_sample_3_v3,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_3_v4 = L.BatchNorm(net.reshape_sample_3_v4,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_3_v5 = L.BatchNorm(net.reshape_sample_3_v5,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+                           
+    # Barch normalizaiton layer 2
+    
+    
+    # Scale layers 2
+    net.scale_3_v1 = L.Scale(net.bn_3_v1,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_3_v2 = L.Scale(net.bn_3_v2,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_3_v3 = L.Scale(net.bn_3_v3,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_3_v4 = L.Scale(net.bn_3_v4,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_3_v5 = L.Scale(net.bn_3_v5,
+                          scale_param = {'bias_term': True })
+    
+    
+    # RELU layer 2
+    net.relu_2_v1 = L.ReLU(net.scale_3_v1)
+    
+    net.relu_2_v2 = L.ReLU(net.scale_3_v2)
+    
+    net.relu_2_v3 = L.ReLU(net.scale_3_v3)
+    
+    net.relu_2_v4 = L.ReLU(net.scale_3_v4)
+    
+    net.relu_2_v5 = L.ReLU(net.scale_3_v5)
+    
+    
+    net.reshape_sample_4_v1 = L.Reshape(net.relu_2_v1,
+                            reshape_param={'shape': {'dim': [image_num_per_sequence, -1, 256] } })   
+    
+    net.reshape_sample_4_v2 = L.Reshape(net.relu_2_v2,
+                            reshape_param={'shape': {'dim': [image_num_per_sequence, -1, 256] } })   
+    
+    net.reshape_sample_4_v3 = L.Reshape(net.relu_2_v3,
+                            reshape_param={'shape': {'dim': [image_num_per_sequence, -1, 256] } })   
+    
+    net.reshape_sample_4_v4 = L.Reshape(net.relu_2_v4,
+                            reshape_param={'shape': {'dim': [image_num_per_sequence, -1, 256] } })   
+    
+    net.reshape_sample_4_v5 = L.Reshape(net.relu_2_v5,
+                            reshape_param={'shape': {'dim': [image_num_per_sequence, -1, 256] } })   
+    
+    
+    
+    
     # Concate sample 1
-    net.concate_sample_1 = L.Concat(net.lstm_2_v1,
-                                    net.lstm_2_v2,
-                                    net.lstm_2_v3,
-                                    net.lstm_2_v4,
-                                    net.lstm_2_v5,
+    net.concate_sample_1 = L.Concat(net.reshape_sample_4_v1,
+                                    net.reshape_sample_4_v2,
+                                    net.reshape_sample_4_v3,
+                                    net.reshape_sample_4_v4,
+                                    net.reshape_sample_4_v5,
                                     concat_param={'axis': 2})
     
     # IP 2
@@ -611,7 +770,7 @@ def creatNet(DB_PREFIX,
     # #train
     if test_or_train == 'train':
 
-                                    net.concate_sample_2 = L.Concat(net.reshape_sample_2_1,
+        net.concate_sample_2 = L.Concat(net.reshape_sample_2_1,
                                     net.reshape_sample_2_2,
                                     net.reshape_sample_2_3,
                                     concat_param={'axis': 0},

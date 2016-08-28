@@ -282,15 +282,28 @@ def main ():
       
     
     
-    for ite_folds in range(folds_CV):
+    #for ite_folds in range(folds_CV):
+    for ite_folds in range(1):
                
-        person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
-        person_index_train = np.setdiff1d(person_index, person_index_test)
+        person_index_train = np.array([1, 2, 3, 4, 5, 7, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 30,
+                               31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 44, 45, 46, 47, 49, 52])
         
-        rd.shuffle(person_index_train)
+        person_index_train = person_index_train - 1
         
-        sequence_num_train = (person_num - step_CV) * speech_num_per_person
-        sequence_num_test = step_CV * speech_num_per_person
+        person_index_test = np.array([6, 8, 9, 15, 26, 29, 33, 42, 43, 48, 50, 51])
+        person_index_test = person_index_test - 1
+                       
+               
+        #person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
+        #person_index_train = np.setdiff1d(person_index, person_index_test)
+        
+        #rd.shuffle(person_index_train)
+        
+        sequence_num_train = len(person_index_train) * speech_num_per_person
+        sequence_num_test = len(person_index_test) * speech_num_per_person
+        
+        #sequence_num_train = (person_num - step_CV) * speech_num_per_person
+        #sequence_num_test = step_CV * speech_num_per_person
         
         sequence_index_train = np.linspace(0, sequence_num_train - 1, sequence_num_train).astype('int')
         sequence_index_test = np.linspace(0, sequence_num_test - 1, sequence_num_test).astype('int')
