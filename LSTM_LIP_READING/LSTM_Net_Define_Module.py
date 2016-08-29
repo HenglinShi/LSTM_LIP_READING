@@ -246,57 +246,57 @@ def creatNet(DB_PREFIX,
                                            'bias_filler': {'type': 'constant', 'value': 0}})
 
    
-  #  net.lstm_2 = L.LSTM(net.lstm_1,
-  #                      net.reshape_cm_1,
-     #                   recurrent_param={'num_output': 256,
-     #                                      'weight_filler': {'type': 'xavier'},
-         #                                  'bias_filler': {'type': 'constant', 'value': 0}})
-    #
+#  net.lstm_2 = L.LSTM(net.lstm_1,
+#                      net.reshape_cm_1,
+#                   recurrent_param={'num_output': 256,
+#                                      'weight_filler': {'type': 'xavier'},
+#                                  'bias_filler': {'type': 'constant', 'value': 0}})
+#
     
     # # TRAIN
-    if test_or_train == 'train':
-        net.reshape_sample_3 = L.Reshape(net.lstm_1,
-                                         reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
-                                         include = {'phase': 0})   
-    
-    else:
-        net.reshape_sample_3 = L.Reshape(net.lstm_1,
-                                         reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
-                                         include = {'phase': 1})   
-    
-    
-    
-    
-    
-    
-    # Barch normalizaiton layer 3
-    # Batch norm layers
-    # ##Train
-    if test_or_train == 'train':
-        net.bn_3 = L.BatchNorm(net.reshape_sample_3,
-                               batch_norm_param = {'use_global_stats': False},
-                               include = {'phase': 0})
-
-    else:
-        net.bn_3 = L.BatchNorm(net.reshape_sample_3,
-                               param = [{'lr_mult': 0},
-                                        {'lr_mult': 0},
-                                        {'lr_mult': 0}],
-                               batch_norm_param = {'use_global_stats': True},
-                               include = {'phase': 1})
-                           
-    # Barch normalizaiton layer 2
-    
-    
-    # Scale layers 2
-    net.scale_3 = L.Scale(net.bn_3,
-                          scale_param = {'bias_term': True })
-    
+#     if test_or_train == 'train':
+#         net.reshape_sample_3 = L.Reshape(net.lstm_1,
+#                                          reshape_param={'shape': {'dim': [batch_size_train, 1, 256, 1] } },
+#                                          include = {'phase': 0})   
+#     
+#     else:
+#         net.reshape_sample_3 = L.Reshape(net.lstm_1,
+#                                          reshape_param={'shape': {'dim': [batch_size_test, 1, 256, 1] } },
+#                                          include = {'phase': 1})   
+#     
+#     
+#     
+#     
+#     
+#     
+#     # Barch normalizaiton layer 3
+#     # Batch norm layers
+#     # ##Train
+#     if test_or_train == 'train':
+#         net.bn_3 = L.BatchNorm(net.reshape_sample_3,
+#                                batch_norm_param = {'use_global_stats': False},
+#                                include = {'phase': 0})
+# 
+#     else:
+#         net.bn_3 = L.BatchNorm(net.reshape_sample_3,
+#                                param = [{'lr_mult': 0},
+#                                         {'lr_mult': 0},
+#                                         {'lr_mult': 0}],
+#                                batch_norm_param = {'use_global_stats': True},
+#                                include = {'phase': 1})
+#                            
+#     # Barch normalizaiton layer 2
+#     
+#     
+#     # Scale layers 2
+#     net.scale_3 = L.Scale(net.bn_3,
+#                           scale_param = {'bias_term': True })
+#     
 
     
     
     # RELU layer 2
-    net.relu_2 = L.ReLU(net.scale_3)
+    net.relu_2 = L.ReLU(net.lstm_1)
 
     
     net.reshape_sample_4 = L.Reshape(net.relu_2,
