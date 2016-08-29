@@ -306,44 +306,44 @@ def creatNet(DB_PREFIX,
                                                 'kernel_size': 2,
                                                 'stride': 2})
     
-    
-    # Barch normalizaiton layer 2
-    # #V1
-    net.bn_2_v1 = L.BatchNorm(net.pooling_1_v1)
-    # #V2
-    net.bn_2_v2 = L.BatchNorm(net.pooling_1_v2)
-    # #V3
-    net.bn_2_v3 = L.BatchNorm(net.pooling_1_v3)
-    # #V4
-    net.bn_2_v4 = L.BatchNorm(net.pooling_1_v4)
-    # #V5
-    net.bn_2_v5 = L.BatchNorm(net.pooling_1_v5)
-    
-    
-    # Scale layers 2
-    # #V1
-    net.scale_2_v1 = L.Scale(net.bn_2_v1)
-    # #V2
-    net.scale_2_v2 = L.Scale(net.bn_2_v2)
-    # #V3
-    net.scale_2_v3 = L.Scale(net.bn_2_v3)
-    # #V4
-    net.scale_2_v4 = L.Scale(net.bn_2_v4)
-    # #V5
-    net.scale_2_v5 = L.Scale(net.bn_2_v5)
+#     
+#     # Barch normalizaiton layer 2
+#     # #V1
+#     net.bn_2_v1 = L.BatchNorm(net.pooling_1_v1)
+#     # #V2
+#     net.bn_2_v2 = L.BatchNorm(net.pooling_1_v2)
+#     # #V3
+#     net.bn_2_v3 = L.BatchNorm(net.pooling_1_v3)
+#     # #V4
+#     net.bn_2_v4 = L.BatchNorm(net.pooling_1_v4)
+#     # #V5
+#     net.bn_2_v5 = L.BatchNorm(net.pooling_1_v5)
+#     
+#     
+#     # Scale layers 2
+#     # #V1
+#     net.scale_2_v1 = L.Scale(net.bn_2_v1)
+#     # #V2
+#     net.scale_2_v2 = L.Scale(net.bn_2_v2)
+#     # #V3
+#     net.scale_2_v3 = L.Scale(net.bn_2_v3)
+#     # #V4
+#     net.scale_2_v4 = L.Scale(net.bn_2_v4)
+#     # #V5
+#     net.scale_2_v5 = L.Scale(net.bn_2_v5)
     
     
     # RELU layer 1
     # #V1
-    net.relu_1_v1 = L.ReLU(net.scale_2_v1)
+    net.relu_1_v1 = L.ReLU(net.pooling_1_v1)
     # #v2
-    net.relu_1_v2 = L.ReLU(net.scale_2_v2)
+    net.relu_1_v2 = L.ReLU(net.pooling_1_v2)
     # #v3
-    net.relu_1_v3 = L.ReLU(net.scale_2_v3)
+    net.relu_1_v3 = L.ReLU(net.pooling_1_v3)
     # #v4
-    net.relu_1_v4 = L.ReLU(net.scale_2_v4)
+    net.relu_1_v4 = L.ReLU(net.pooling_1_v4)
     # #v5
-    net.relu_1_v5 = L.ReLU(net.scale_2_v5)
+    net.relu_1_v5 = L.ReLU(net.pooling_1_v5)
     
     # IP 1
     # #v1
