@@ -138,19 +138,19 @@ def creatNet(DB_PREFIX,
                                                     'bias_filler': {'type': 'constant', 'value': 0}})
 
     
-    net.con_2 = L.Convolution(net.con_1,
-                                 param=[{'lr_mult': 1, 'decay_mult': 1}, 
-                                        {'lr_mult': 2, 'decay_mult': 0}],
-                                 convolution_param={'num_output': 64,
-                                                    'kernel_size': 3,
-                                                    'stride': 1,
-                                                    'weight_filler': {'type': 'xavier'},
-                                                    'bias_filler': {'type': 'constant', 'value': 0}})
+#     net.con_2 = L.Convolution(net.con_1,
+#                                  param=[{'lr_mult': 1, 'decay_mult': 1}, 
+#                                         {'lr_mult': 2, 'decay_mult': 0}],
+#                                  convolution_param={'num_output': 64,
+#                                                     'kernel_size': 3,
+#                                                     'stride': 1,
+#                                                     'weight_filler': {'type': 'xavier'},
+#                                                     'bias_filler': {'type': 'constant', 'value': 0}})
     
     
     
     # Pooling layer 1
-    net.pooling_1 = L.Pooling(net.con_2,
+    net.pooling_1 = L.Pooling(net.con_1,
                                  pooling_param={'pool': P.Pooling.MAX,
                                                 'kernel_size': 2,
                                                 'stride': 2})
