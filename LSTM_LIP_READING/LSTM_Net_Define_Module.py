@@ -157,34 +157,34 @@ def creatNet(DB_PREFIX,
    
     
     # Batch norm layers
-    # ##Train
-    if test_or_train == 'train':
-        net.bn_2 = L.BatchNorm(net.pooling_1,
-                               batch_norm_param = {'use_global_stats': False},
-                               include = {'phase': 0})
-
-    else:
-        net.bn_2 = L.BatchNorm(net.pooling_1,
-                               param = [{'lr_mult': 0},
-                                        {'lr_mult': 0},
-                                        {'lr_mult': 0}],
-                               batch_norm_param = {'use_global_stats': True},
-                               include = {'phase': 1})
-                           
-    # Barch normalizaiton layer 2
-    
-    
-    # Scale layers 2
-    net.scale_2 = L.Scale(net.bn_2,
-                          scale_param = {'bias_term': True })
-    
+#     # ##Train
+#     if test_or_train == 'train':
+#         net.bn_2 = L.BatchNorm(net.pooling_1,
+#                                batch_norm_param = {'use_global_stats': False},
+#                                include = {'phase': 0})
+# 
+#     else:
+#         net.bn_2 = L.BatchNorm(net.pooling_1,
+#                                param = [{'lr_mult': 0},
+#                                         {'lr_mult': 0},
+#                                         {'lr_mult': 0}],
+#                                batch_norm_param = {'use_global_stats': True},
+#                                include = {'phase': 1})
+#                            
+#     # Barch normalizaiton layer 2
+#     
+#     
+#     # Scale layers 2
+#     net.scale_2 = L.Scale(net.bn_2,
+#                           scale_param = {'bias_term': True })
+#     
     
 
     
     
     
     # RELU layer 1
-    net.relu_1 = L.ReLU(net.scale_2)
+    net.relu_1 = L.ReLU(net.pooling_1)
 
     
     # IP 1
