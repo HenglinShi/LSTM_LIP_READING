@@ -244,7 +244,7 @@ def main ():
     
     DB_PREFIX = os.path.join(working_dir, 'Experiment/Database', input_mode)  
 
-    batch_size_train = 60
+    batch_size_train = 20
     batch_size_test = 20 
     folds_CV = 5     
     image_num_per_sequence = 20      

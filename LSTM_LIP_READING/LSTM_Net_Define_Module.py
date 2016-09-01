@@ -725,68 +725,67 @@ def creatNet(DB_PREFIX,
                                                       'axis':2})
     
     # Slice train ip_2
-    if test_or_train == 'train':
-
-    # #train
-        [net.slice_sample_1_1,
-         net.slice_sample_1_2,
-         net.slice_sample_1_3] = L.Slice(net.ip_2,
-                                         ntop=3,
-                                         slice_param={'axis': 1,
-                                                      'slice_point': [1, 2]},
-                                         include={'phase': 0})
-    
-    # #test
-    
-    
-    # Reshape sliced sample
-    # #train
-    if test_or_train == 'train':
-
-    # ##slice_1
-        net.reshape_sample_2_1 = L.Reshape(net.slice_sample_1_1,
-                                           reshape_param={'shape': { 'dim': [1, 20, 10] }},
-                                           include={'phase': 0})
-        
-        # ##slice_2
-        net.reshape_sample_2_2 = L.Reshape(net.slice_sample_1_2,
-                                           reshape_param={'shape': { 'dim': [1, 20, 10] }},
-                                           include={'phase': 0})
-        
-        # ##slice_3
-        net.reshape_sample_2_3 = L.Reshape(net.slice_sample_1_3,
-                                           reshape_param={'shape': { 'dim': [1, 20, 10] }},
-                                           include={'phase': 0})
-    
-    # #test
-    else:
-        net.reshape_sample_2_1 = L.Reshape(net.ip_2,
-                                       reshape_param={'shape': { 'dim': [1, 20, 10] }},
-                                       include = {'phase': 1})
+#     if test_or_train == 'train':
+# 
+#     # #train
+#         [net.slice_sample_1_1,
+#          net.slice_sample_1_2,
+#          net.slice_sample_1_3] = L.Slice(net.ip_2,
+#                                          ntop=3,
+#                                          slice_param={'axis': 1,
+#                                                       'slice_point': [1, 2]},
+#                                          include={'phase': 0})
+#     
+#     # #test
+#     
+#     
+#     # Reshape sliced sample
+#     # #train
+#     if test_or_train == 'train':
+# 
+#     # ##slice_1
+#         net.reshape_sample_2_1 = L.Reshape(net.slice_sample_1_1,
+#                                            reshape_param={'shape': { 'dim': [1, 20, 10] }},
+#                                            include={'phase': 0})
+#         
+#         # ##slice_2
+#         net.reshape_sample_2_2 = L.Reshape(net.slice_sample_1_2,
+#                                            reshape_param={'shape': { 'dim': [1, 20, 10] }},
+#                                            include={'phase': 0})
+#         
+#         # ##slice_3
+#         net.reshape_sample_2_3 = L.Reshape(net.slice_sample_1_3,
+#                                            reshape_param={'shape': { 'dim': [1, 20, 10] }},
+#                                            include={'phase': 0})
+#     
+#     # #test
+#     else:
+    net.reshape_sample_2_1 = L.Reshape(net.ip_2,
+                                       reshape_param={'shape': { 'dim': [1, 20, 10] }})
      
     
-    
-    # Concate 2
-    # #train
-    if test_or_train == 'train':
-
-        net.concate_sample_2 = L.Concat(net.reshape_sample_2_1,
-                                    net.reshape_sample_2_2,
-                                    net.reshape_sample_2_3,
-                                    concat_param={'axis': 0},
-                                    include={'phase': 0})
-    
-    # #test
-    else:
-        net.concate_sample_2 = L.Concat(net.reshape_sample_2_1,
-                                    concat_param={'axis': 0},
-                                    include={'phase': 1})
-    
-    
+#     
+#     # Concate 2
+#     # #train
+#     if test_or_train == 'train':
+# 
+#         net.concate_sample_2 = L.Concat(net.reshape_sample_2_1,
+#                                     net.reshape_sample_2_2,
+#                                     net.reshape_sample_2_3,
+#                                     concat_param={'axis': 0},
+#                                     include={'phase': 0})
+#     
+#     # #test
+#     else:
+#         net.concate_sample_2 = L.Concat(net.reshape_sample_2_1,
+#                                     concat_param={'axis': 0},
+#                                     include={'phase': 1})
+#     
+#     
     
     
     # ip_3
-    net.ip_3 = L.InnerProduct(net.concate_sample_2,
+    net.ip_3 = L.InnerProduct(net.reshape_sample_2_1,
                               param=[{'lr_mult': 1, 'decay_mult': 1},
                                      {'lr_mult': 2, 'decay_mult': 0}],
                               inner_product_param={'num_output': 10,
@@ -811,8 +810,8 @@ def creatNet(DB_PREFIX,
     # #train
     if test_or_train == 'train':
 
-                                    net.reshape_label_2 = L.Reshape(net.slice_label_1_1,
-                                    reshape_param={'shape': { 'dim': [3, 1] }},
+        net.reshape_label_2 = L.Reshape(net.slice_label_1_1,
+                                    reshape_param={'shape': { 'dim': [-1, 1] }},
                                     include={'phase': 0})
     
     # #test
