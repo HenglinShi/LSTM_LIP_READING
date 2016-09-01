@@ -167,33 +167,33 @@ def creatNet(DB_PREFIX,
     
     
     # Batch norm layers
-    # #V1
-    net.bn_1_v1 = L.BatchNorm(net.sample_v1)
-    # #V2
-    net.bn_1_v2 = L.BatchNorm(net.sample_v2)
-    # #V3
-    net.bn_1_v3 = L.BatchNorm(net.sample_v3)
-    # #V4
-    net.bn_1_v4 = L.BatchNorm(net.sample_v4)
-    # #V5
-    net.bn_1_v5 = L.BatchNorm(net.sample_v5)
-    
-    
-    # Scale layers 1
-    # #V1
-    net.scale_1_v1 = L.Scale(net.bn_1_v1)
-    # #V2
-    net.scale_1_v2 = L.Scale(net.bn_1_v2)
-    # #V3
-    net.scale_1_v3 = L.Scale(net.bn_1_v3)
-    # #V4
-    net.scale_1_v4 = L.Scale(net.bn_1_v4)
-    # #V5
-    net.scale_1_v5 = L.Scale(net.bn_1_v5)
-    
+#     # #V1
+#     net.bn_1_v1 = L.BatchNorm(net.sample_v1)
+#     # #V2
+#     net.bn_1_v2 = L.BatchNorm(net.sample_v2)
+#     # #V3
+#     net.bn_1_v3 = L.BatchNorm(net.sample_v3)
+#     # #V4
+#     net.bn_1_v4 = L.BatchNorm(net.sample_v4)
+#     # #V5
+#     net.bn_1_v5 = L.BatchNorm(net.sample_v5)
+#     
+#     
+#     # Scale layers 1
+#     # #V1
+#     net.scale_1_v1 = L.Scale(net.bn_1_v1)
+#     # #V2
+#     net.scale_1_v2 = L.Scale(net.bn_1_v2)
+#     # #V3
+#     net.scale_1_v3 = L.Scale(net.bn_1_v3)
+#     # #V4
+#     net.scale_1_v4 = L.Scale(net.bn_1_v4)
+#     # #V5
+#     net.scale_1_v5 = L.Scale(net.bn_1_v5)
+#     
     # Convolution layers 1
     # #V1
-    net.con_1_v1 = L.Convolution(net.scale_1_v1,
+    net.con_1_v1 = L.Convolution(net.sample_v1,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
                                  convolution_param={'num_output': 64,
                                                     'kernel_size': 3,
@@ -201,7 +201,7 @@ def creatNet(DB_PREFIX,
                                                     'weight_filler': {'type': 'xavier'},
                                                     'bias_filler': {'type': 'constant', 'value': 0}})
     # #v2
-    net.con_1_v2 = L.Convolution(net.scale_1_v2,
+    net.con_1_v2 = L.Convolution(net.sample_v2,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
                                  convolution_param={'num_output': 64,
                                                     'kernel_size': 3,
@@ -209,7 +209,7 @@ def creatNet(DB_PREFIX,
                                                     'weight_filler': {'type': 'xavier'},
                                                     'bias_filler': {'type': 'constant', 'value': 0}})
     # #v3
-    net.con_1_v3 = L.Convolution(net.scale_1_v3,
+    net.con_1_v3 = L.Convolution(net.sample_v3,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
                                  convolution_param={'num_output': 64,
                                                     'kernel_size': 3,
@@ -217,7 +217,7 @@ def creatNet(DB_PREFIX,
                                                     'weight_filler': {'type': 'xavier'},
                                                     'bias_filler': {'type': 'constant', 'value': 0}})
     # #v4
-    net.con_1_v4 = L.Convolution(net.scale_1_v4,
+    net.con_1_v4 = L.Convolution(net.sample_v4,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
                                  convolution_param={'num_output': 64,
                                                     'kernel_size': 3,
@@ -225,7 +225,7 @@ def creatNet(DB_PREFIX,
                                                     'weight_filler': {'type': 'xavier'},
                                                     'bias_filler': {'type': 'constant', 'value': 0}})
     # #v5
-    net.con_1_v5 = L.Convolution(net.scale_1_v5,
+    net.con_1_v5 = L.Convolution(net.sample_v5,
                                  param=[{'lr_mult': 1, 'decay_mult': 1}, {'lr_mult': 2, 'decay_mult': 0}],
                                  convolution_param={'num_output': 64,
                                                     'kernel_size': 3,
