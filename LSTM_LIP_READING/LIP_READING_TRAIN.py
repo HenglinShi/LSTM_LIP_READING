@@ -128,7 +128,7 @@ def main ():
     
     working_dir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING'
     input_mode = 'Front_Input'
-    data_version = 'Small'
+    data_version = 'Large'
     
     _DB_NAME_SAMPLE_TRAIN = '/SAMPLE_TRAIN'
     _DB_NAME_SAMPLE_TEST = '/SAMPLE_TEST'
