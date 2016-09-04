@@ -165,31 +165,87 @@ def creatNet(DB_PREFIX,
                     include={'phase': 1})  
     
     
+    if test_or_train == 'train':
+        
+        net.bn_1_v1 = L.BatchNorm(net.sample_v1,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_1_v2 = L.BatchNorm(net.sample_v2,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_1_v3 = L.BatchNorm(net.sample_v3,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_1_v4 = L.BatchNorm(net.sample_v4,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_1_v5 = L.BatchNorm(net.sample_v5,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+
+    else:
+        net.bn_1_v1 = L.BatchNorm(net.sample_v1,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_1_v2 = L.BatchNorm(net.sample_v2,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_1_v3 = L.BatchNorm(net.sample_v3,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_1_v4 = L.BatchNorm(net.sample_v4,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_1_v5 = L.BatchNorm(net.sample_v5,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+                           
+    # Barch normalizaiton layer 2
     
+    
+    # Scale layers 2
+    net.scale_1_v1 = L.Scale(net.bn_1_v1,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_1_v2 = L.Scale(net.bn_1_v2,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_1_v3 = L.Scale(net.bn_1_v3,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_1_v4 = L.Scale(net.bn_1_v4,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_1_v5 = L.Scale(net.bn_1_v5,
+                          scale_param = {'bias_term': True })
     # Batch norm layers
-    # #V1
-    net.bn_1_v1 = L.BatchNorm(net.sample_v1)
-    # #V2
-    net.bn_1_v2 = L.BatchNorm(net.sample_v2)
-    # #V3
-    net.bn_1_v3 = L.BatchNorm(net.sample_v3)
-    # #V4
-    net.bn_1_v4 = L.BatchNorm(net.sample_v4)
-    # #V5
-    net.bn_1_v5 = L.BatchNorm(net.sample_v5)
+
     
     
-    # Scale layers 1
-    # #V1
-    net.scale_1_v1 = L.Scale(net.bn_1_v1)
-    # #V2
-    net.scale_1_v2 = L.Scale(net.bn_1_v2)
-    # #V3
-    net.scale_1_v3 = L.Scale(net.bn_1_v3)
-    # #V4
-    net.scale_1_v4 = L.Scale(net.bn_1_v4)
-    # #V5
-    net.scale_1_v5 = L.Scale(net.bn_1_v5)
+
     
     # Convolution layers 1
     # #V1
@@ -307,31 +363,87 @@ def creatNet(DB_PREFIX,
                                                 'stride': 2})
     
     
+
+    
+    if test_or_train == 'train':
+        
+        net.bn_2_v1 = L.BatchNorm(net.pooling_1_v1,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_2_v2 = L.BatchNorm(net.pooling_1_v2,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_2_v3 = L.BatchNorm(net.pooling_1_v3,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_2_v4 = L.BatchNorm(net.pooling_1_v4,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+        
+        net.bn_2_v5 = L.BatchNorm(net.pooling_1_v5,
+                               batch_norm_param = {'use_global_stats': False},
+                               include = {'phase': 0})
+
+    else:
+        net.bn_2_v1 = L.BatchNorm(net.pooling_1_v1,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_2_v2 = L.BatchNorm(net.pooling_1_v2,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_2_v3 = L.BatchNorm(net.pooling_1_v3,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_2_v4 = L.BatchNorm(net.pooling_1_v4,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+        
+        net.bn_2_v5 = L.BatchNorm(net.pooling_1_v5,
+                               param = [{'lr_mult': 0},
+                                        {'lr_mult': 0},
+                                        {'lr_mult': 0}],
+                               batch_norm_param = {'use_global_stats': True},
+                               include = {'phase': 1})
+                           
     # Barch normalizaiton layer 2
-    # #V1
-    net.bn_2_v1 = L.BatchNorm(net.pooling_1_v1)
-    # #V2
-    net.bn_2_v2 = L.BatchNorm(net.pooling_1_v2)
-    # #V3
-    net.bn_2_v3 = L.BatchNorm(net.pooling_1_v3)
-    # #V4
-    net.bn_2_v4 = L.BatchNorm(net.pooling_1_v4)
-    # #V5
-    net.bn_2_v5 = L.BatchNorm(net.pooling_1_v5)
     
     
     # Scale layers 2
-    # #V1
-    net.scale_2_v1 = L.Scale(net.bn_2_v1)
-    # #V2
-    net.scale_2_v2 = L.Scale(net.bn_2_v2)
-    # #V3
-    net.scale_2_v3 = L.Scale(net.bn_2_v3)
-    # #V4
-    net.scale_2_v4 = L.Scale(net.bn_2_v4)
-    # #V5
-    net.scale_2_v5 = L.Scale(net.bn_2_v5)
+    net.scale_2_v1 = L.Scale(net.bn_2_v1,
+                          scale_param = {'bias_term': True })
     
+    net.scale_2_v2 = L.Scale(net.bn_2_v2,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_2_v3 = L.Scale(net.bn_2_v3,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_2_v4 = L.Scale(net.bn_2_v4,
+                          scale_param = {'bias_term': True })
+    
+    net.scale_2_v5 = L.Scale(net.bn_2_v5,
+                          scale_param = {'bias_term': True })
+
+    
+
     
     # RELU layer 1
     # #V1

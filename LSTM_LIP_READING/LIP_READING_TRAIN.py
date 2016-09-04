@@ -233,7 +233,7 @@ def main ():
     
     working_dir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING'
     input_mode = 'Five_Inputs'
-    data_version = 'Small'
+    data_version = 'Large'
     
     
     data_v1_path = os.path.join(working_dir, 'Data', data_version, 'V1')
