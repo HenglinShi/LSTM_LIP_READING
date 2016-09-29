@@ -158,8 +158,12 @@ def main ():
     
     
     
+    
+    
     # Load the data
-    data_path = os.path.join(working_dir, 'Data', data_version, 'V1')
+    angle = 'V5'
+    
+    data_path = os.path.join(working_dir, 'Data', data_version, angle)
     data = loadData(data_path)
     
     # Create splitting index
@@ -350,7 +354,7 @@ def main ():
             
     
     
-    sio.savemat('./Output/acc.mat', {'acc':test_acc})
+    sio.savemat('./Output/' + angle + 'acc.mat', {'acc':test_acc})
             
 if __name__ == '__main__':
     main()            
