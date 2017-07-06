@@ -1,12 +1,12 @@
-test_iter: 300
-test_interval: 4000
-base_lr: 0.01
-display: 2000
-max_iter: 20000
+test_iter: 0
+test_interval: 100
+base_lr: 0.00999999977648
+display: 200
+max_iter: 10000
 lr_policy: "step"
-gamma: 0.1
-momentum: 0.9
-weight_decay: 0.005
+gamma: 0.10000000149
+momentum: 0.899999976158
+weight_decay: 0.00499999988824
 stepsize: 10000
 snapshot: 5000
 snapshot_prefix: "snapshot_lstm_lip_reading"
@@ -14,4 +14,4 @@ solver_mode: CPU
 random_seed: 1701
 net: "train_test_net.prototxt"
 average_loss: 1000
-clip_gradients: 5
+clip_gradients: 5.0
