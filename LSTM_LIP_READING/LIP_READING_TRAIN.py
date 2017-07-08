@@ -178,7 +178,7 @@ def prepareData(DB_PREFIX, data, data_version, person_index_train, person_index_
         labels_train = labels[ :, person_index_train, : ].reshape(clip_markers_train.shape)
         labels_test = labels[ :, person_index_test, : ].reshape(clip_markers_test.shape)
                
-        #Create Sample Index
+        #Create Sample Indexdata_v1
         sample_indexes_train = labels[ :, person_index_train, : ]
             
         for i in range(0, sample_indexes_train.shape[1]) :
@@ -253,10 +253,6 @@ def main ():
     
     # Load the data
     data_v1 = loadData(data_v1_path)
-    data_v2 = loadData(data_v2_path)
-    data_v3 = loadData(data_v3_path)
-    data_v4 = loadData(data_v4_path)
-    data_v5 = loadData(data_v5_path)
     
     samples = data_v1['samples'].astype('uint8')
 
@@ -301,13 +297,16 @@ def main ():
         
         
         prepareData(DB_PREFIX, data_v1, '_V1', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
-        prepareData(DB_PREFIX, data_v2, '_V2', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
-        prepareData(DB_PREFIX, data_v3, '_V3', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
-        prepareData(DB_PREFIX, data_v4, '_V4', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
-        prepareData(DB_PREFIX, data_v5, '_V5', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
         
         #person_index[[0:(step_CV * ite_folds)], [(step_CV * ite_folds + step_CV) : person_num]]
   
+        dataLayerParam_train = dict(videoNumPerBatch = 3,
+                                frameNumPerVideo = 20,
+                                dataDir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Data/Large/V1',
+                                frameHeight = 40,
+                                frameWidth = 50,
+                                frameChannel = 1)
+        
         
         
         solver_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/solver.prototxt'
@@ -315,11 +314,11 @@ def main ():
         test_net_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/test_net.prototxt'
 
         with open(train_net_path, 'w') as f:
-            train_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'train')
+            train_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'train', dataLayerParam_train)
             f.write(str(train_net.to_proto()))
          
         with open(test_net_path, 'w') as f:   
-            test_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test')
+            test_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test', None)
             f.write(str(test_net.to_proto()))
             
         solver = None
@@ -338,10 +337,13 @@ def main ():
         
         
         mBatchLoader = LipFrameBatchLoader(3, 20, '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Data/Large/V1', 40, 50)
-        
-        
-        
-        
+        videoNumPerBatch = 3
+        frameNumPerVideo = 20
+        frameHeight = 40
+        frameWidth = 50
+        sampleIntput= np.zeros(shape=(videoNumPerBatch * frameNumPerVideo, 1, frameHeight, frameWidth))
+        clipMarkerInput = np.ones(shape=(videoNumPerBatch * frameNumPerVideo, 1))
+        labelInput = np.ones(shape=(60, 1 , 1, 1))
         while rest_train_iter > 0 :
             
             correct = 0
@@ -359,6 +361,32 @@ def main ():
             if (int)(rest_train_iter / solver_test_interval) > 0:
                 for das in range(solver_test_interval):
                     solver.step(1)
+                    
+#                     
+#                     sampleBatch, labelBatch, clipMarkerBatch = mBatchLoader.getNextBatch()
+#             
+#                     
+#             
+#                     for i in range(frameNumPerVideo):
+#                         for j in range(videoNumPerBatch):
+#                             sampleIntput[j + i * videoNumPerBatch, 0, :, :] = sampleBatch[i, j, 0, :, :]
+#                             clipMarkerInput[j + i * videoNumPerBatch, 0] = clipMarkerBatch[i, j]
+#                             labelInput[j + i * videoNumPerBatch] = labelBatch[j]
+#             
+#                     solver.net.blobs['sample_v1'].data[...] = sampleIntput
+#                     solver.net.blobs['label'].data[...] = labelInput
+#                     solver.net.blobs['cm'].data[...] = clipMarkerInput.reshape([60,1,1,1])
+#                     
+#                     solver.net.forward(start ='bn_1_v1')
+#                     solver.net.backward()
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    #solver.step(1)
                     print solver.net.blobs['loss'].data, solver.net.blobs['ip_3'].data.argmax(1), solver.net.blobs['reshape_label_2'].data.reshape([-1]), solver.net.blobs['accuracy'].data
                        
             else :
