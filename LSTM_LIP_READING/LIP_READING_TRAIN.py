@@ -280,25 +280,8 @@ def main ():
     
     
     for ite_folds in range(folds_CV):
-               
-        person_index_test = person_index[(step_CV * ite_folds):(step_CV * ite_folds + step_CV)]  
-        person_index_train = np.setdiff1d(person_index, person_index_test)
+
         
-        rd.shuffle(person_index_train)
-        
-        sequence_num_train = (person_num - step_CV) * speech_num_per_person
-        sequence_num_test = step_CV * speech_num_per_person
-        
-        sequence_index_train = np.linspace(0, sequence_num_train - 1, sequence_num_train).astype('int')
-        sequence_index_test = np.linspace(0, sequence_num_test - 1, sequence_num_test).astype('int')
-        
-        rd.shuffle(sequence_index_train)
-        rd.shuffle(sequence_index_test)
-        
-        
-        prepareData(DB_PREFIX, data_v1, '_V1', person_index_train, person_index_test, sequence_index_train, sequence_index_test, ite_folds + 1, batch_size_train, batch_size_test)
-        
-        #person_index[[0:(step_CV * ite_folds)], [(step_CV * ite_folds + step_CV) : person_num]]
   
         dataLayerParam_train = dict(videoNumPerBatch = 3,
                                 frameNumPerVideo = 20,
@@ -307,6 +290,12 @@ def main ():
                                 frameWidth = 50,
                                 frameChannel = 1)
         
+        dataLayerParam_test = dict(videoNumPerBatch = 1,
+                                frameNumPerVideo = 20,
+                                dataDir = '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Data/Large/V1',
+                                frameHeight = 40,
+                                frameWidth = 50,
+                                frameChannel = 1)
         
         
         solver_path = DB_PREFIX + '/' + str(ite_folds + 1) + '/solver.prototxt'
@@ -318,11 +307,11 @@ def main ():
             f.write(str(train_net.to_proto()))
          
         with open(test_net_path, 'w') as f:   
-            test_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test', None)
+            test_net = creatNet(DB_PREFIX + '/' + str(ite_folds + 1), batch_size_train, batch_size_test, image_num_per_sequence,'test', dataLayerParam_test)
             f.write(str(test_net.to_proto()))
             
         solver = None
-        solver = createSolver(solver_path, train_net_path, test_net_path, working_dir + '/Experiment/Snapshot/' + input_mode, 0.01)
+        solver = createSolver(solver_path, train_net_path, test_net_path, working_dir + '/Experiment/Snapshot/' + input_mode, 0.005)
         with open(solver_path, 'w') as f:    
             f.write(str(solver))
     
@@ -334,23 +323,14 @@ def main ():
         testPred = np.zeros(solver_test_iter)
         testGT = np.zeros(solver_test_iter)
         
-        
-        
-        mBatchLoader = LipFrameBatchLoader(3, 20, '/research/tklab/personal/hshi/Caffe_Workspace/LIP-READING/Data/Large/V1', 40, 50)
-        videoNumPerBatch = 3
-        frameNumPerVideo = 20
-        frameHeight = 40
-        frameWidth = 50
-        sampleIntput= np.zeros(shape=(videoNumPerBatch * frameNumPerVideo, 1, frameHeight, frameWidth))
-        clipMarkerInput = np.ones(shape=(videoNumPerBatch * frameNumPerVideo, 1))
-        labelInput = np.ones(shape=(60, 1 , 1, 1))
+
         while rest_train_iter > 0 :
             
             correct = 0
             for iter_test in range(solver_test_iter):
                 
                 solver.test_nets[0].forward()
-                testGT[iter_test] = solver.test_nets[0].blobs['reshape_label_2'].data
+                testGT[iter_test] = solver.test_nets[0].blobs['label'].data
                 testPred[iter_test] = solver.test_nets[0].blobs['ip_3'].data.argmax(1)
                 correct += sum(solver.test_nets[0].blobs['accuracy'].data)
 
@@ -361,33 +341,7 @@ def main ():
             if (int)(rest_train_iter / solver_test_interval) > 0:
                 for das in range(solver_test_interval):
                     solver.step(1)
-                    
-#                     
-#                     sampleBatch, labelBatch, clipMarkerBatch = mBatchLoader.getNextBatch()
-#             
-#                     
-#             
-#                     for i in range(frameNumPerVideo):
-#                         for j in range(videoNumPerBatch):
-#                             sampleIntput[j + i * videoNumPerBatch, 0, :, :] = sampleBatch[i, j, 0, :, :]
-#                             clipMarkerInput[j + i * videoNumPerBatch, 0] = clipMarkerBatch[i, j]
-#                             labelInput[j + i * videoNumPerBatch] = labelBatch[j]
-#             
-#                     solver.net.blobs['sample_v1'].data[...] = sampleIntput
-#                     solver.net.blobs['label'].data[...] = labelInput
-#                     solver.net.blobs['cm'].data[...] = clipMarkerInput.reshape([60,1,1,1])
-#                     
-#                     solver.net.forward(start ='bn_1_v1')
-#                     solver.net.backward()
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    #solver.step(1)
-                    print solver.net.blobs['loss'].data, solver.net.blobs['ip_3'].data.argmax(1), solver.net.blobs['reshape_label_2'].data.reshape([-1]), solver.net.blobs['accuracy'].data
+                    print solver.net.blobs['loss'].data, solver.net.blobs['ip_3'].data.argmax(1), solver.net.blobs['label'].data.reshape([-1]), solver.net.blobs['accuracy'].data
                        
             else :
                 solver.step(rest_train_iter)
